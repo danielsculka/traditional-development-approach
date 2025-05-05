@@ -1,6 +1,8 @@
 ﻿using ManualProg.Api.Data.Users;
 using ManualProg.Api.Features.Auth.Endpoints;
+using ManualProg.Api.Features.Comments.Endpoints;
 using ManualProg.Api.Features.Posts.Endpoints;
+using ManualProg.Api.Features.Profiles.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
@@ -24,11 +26,12 @@ public static class Endpoints
     public static void MapEndpoints(this WebApplication app)
     {
         var endpoints = app.MapGroup("")
-            //.AddEndpointFilter<RequestLoggingFilter>()
             .WithOpenApi();
 
         endpoints.MapAuthEndpoints();
         endpoints.MapPostEndpoints();
+        endpoints.MapCommentEndpoints();
+        endpoints.MapProfileEndpoints();
     }
 
     private static void MapAuthEndpoints(this IEndpointRouteBuilder app)
@@ -39,6 +42,10 @@ public static class Endpoints
         endpoints.MapPublicGroup()
             .MapEndpoint<Register>()
             .MapEndpoint<Login>();
+
+        endpoints.MapAuthorizedGroup()
+            .MapEndpoint<RefreshToken>()
+            .MapEndpoint<Logout>();
     }
 
     private static void MapPostEndpoints(this IEndpointRouteBuilder app)
@@ -46,17 +53,47 @@ public static class Endpoints
         var endpoints = app.MapGroup("/posts")
             .WithTags("Posts");
 
-        //endpoints.MapPublicGroup()
-        //    .MapEndpoint<GetPosts>()
-        //    .MapEndpoint<GetPostById>()
-        //    .MapEndpoint<GetPostComments>();
+        endpoints.MapPublicGroup()
+            .MapEndpoint<GetPosts>()
+            .MapEndpoint<GetPost>()
+            .MapEndpoint<GetPostImage>();
+
+        endpoints.MapAuthorizedGroup()
+            .MapEndpoint<DeleteProfile>();
 
         endpoints.MapAuthorizedGroup([UserRole.Basic])
-            .MapEndpoint<CreatePost>();
-        //.MapEndpoint<UpdatePost>()
-        //.MapEndpoint<DeletePost>()
-        //.MapEndpoint<LikePost>()
-        //.MapEndpoint<UnlikePost>();
+            .MapEndpoint<CreatePost>()
+            .MapEndpoint<UpdatePost>()
+            .MapEndpoint<LikePost>()
+            .MapEndpoint<UnlikePost>();
+    }
+
+    private static void MapCommentEndpoints(this IEndpointRouteBuilder app)
+    {
+        var endpoints = app.MapGroup("/comments")
+            .WithTags("Comments");
+
+        // TODO: comment get
+
+        endpoints.MapAuthorizedGroup([UserRole.Basic])
+            .MapEndpoint<CreateComment>()
+            .MapEndpoint<LikeComment>()
+            .MapEndpoint<UnlikeComment>();
+
+        endpoints.MapAuthorizedGroup()
+            .MapEndpoint<DeleteComment>();
+    }
+
+    private static void MapProfileEndpoints(this IEndpointRouteBuilder app)
+    {
+        var endpoints = app.MapGroup("/profiles")
+            .WithTags("Profiles");
+
+        endpoints.MapPublicGroup()
+            .MapEndpoint<GetProfileImage>();
+
+        endpoints.MapAuthorizedGroup([UserRole.Basic])
+            .MapEndpoint<UpdateProfile>();
     }
 
     private static RouteGroupBuilder MapPublicGroup(this IEndpointRouteBuilder app, string? prefix = null)

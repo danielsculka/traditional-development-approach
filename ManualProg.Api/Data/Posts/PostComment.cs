@@ -13,6 +13,8 @@ public class PostComment : Entity<Guid>
     public Guid? ReplyToCommentId { get; set; }
     public virtual PostComment? ReplyToComment { get; set; }
 
+    public required string Content { get; set; }
+
     public virtual ICollection<PostComment> Replies { get; set; } = [];
     public virtual ICollection<PostCommentLike> Likes { get; set; } = [];
 }

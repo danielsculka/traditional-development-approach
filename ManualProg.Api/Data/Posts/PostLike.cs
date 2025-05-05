@@ -4,7 +4,7 @@ namespace ManualProg.Api.Data.Posts;
 
 public class PostLike : Entity<Guid>
 {
-    public required Guid PostId { get; set; }
+    public Guid PostId { get; set; } = Guid.Empty;
     public virtual Post Post { get; set; } = null!;
 
     public required Guid ProfileId { get; set; }

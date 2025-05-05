@@ -1,4 +1,6 @@
-﻿using ManualProg.Api.Data.Posts;
+﻿using ManualProg.Api.Data.CoinTransactions;
+using ManualProg.Api.Data.Images;
+using ManualProg.Api.Data.Posts;
 using ManualProg.Api.Data.Profiles;
 using ManualProg.Api.Data.Users;
 using ManualProg.Api.Exceptions;
@@ -14,6 +16,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users { get; set; }
     public DbSet<Profile> Profiles { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<PostLike> PostLikes { get; set; }
+    public DbSet<PostComment> PostComments { get; set; }
+    public DbSet<PostCommentLike> PostCommentLikes { get; set; }
+    public DbSet<Image> Images { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,22 +29,100 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         {
             entity.HasOne(c => c.Profile)
                 .WithOne(c => c.User)
-                .HasForeignKey<Profile>(c => c.UserId);
+                .HasForeignKey<Profile>(c => c.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         _ = modelBuilder.Entity<Profile>(entity =>
         {
             entity.HasOne(c => c.User)
                 .WithOne(c => c.Profile)
-                .HasForeignKey<User>(c => c.ProfileId);
+                .HasForeignKey<User>(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasMany(c => c.TransactionsAsSender)
-                .WithOne(c => c.SenderProfile)
-                .HasForeignKey(c => c.SenderProfileId);
+            entity.HasOne(c => c.Image)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 
-            entity.HasMany(c => c.TransactionsAsReciever)
-                .WithOne(c => c.ReceiverProfile)
-                .HasForeignKey(c => c.ReceiverProfileId);
+        _ = modelBuilder.Entity<CoinTransaction>(entity =>
+        {
+            entity.ToTable("CoinTransactions");
+
+            entity.HasOne(c => c.SenderProfile)
+                .WithMany()
+                .HasForeignKey(c => c.SenderProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(c => c.ReceiverProfile)
+                .WithMany()
+                .HasForeignKey(c => c.ReceiverProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        _ = modelBuilder.Entity<Post>(entity =>
+        {
+            entity.HasOne(c => c.Profile)
+                .WithMany()
+                .HasForeignKey(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(c => c.Likes)
+                .WithOne(c => c.Post)
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(c => c.Comments)
+                .WithOne(c => c.Post)
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(c => c.Images)
+                .WithOne(c => c.Post)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        _ = modelBuilder.Entity<PostImage>(entity =>
+        {
+            entity.ToTable("PostImages");
+
+            entity.HasOne(c => c.Image)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        _ = modelBuilder.Entity<PostLike>(entity =>
+        {
+            entity.HasOne(c => c.Profile)
+                .WithMany()
+                .HasForeignKey(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        _ = modelBuilder.Entity<PostComment>(entity =>
+        {
+            entity.HasMany(c => c.Likes)
+                .WithOne(c => c.Comment)
+                .HasForeignKey(c => c.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(c => c.Profile)
+                .WithMany()
+                .HasForeignKey(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(c => c.ReplyToComment)
+                .WithMany(c => c.Replies)
+                .HasForeignKey(c => c.ReplyToCommentId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        _ = modelBuilder.Entity<PostCommentLike>(entity =>
+        {
+            entity.HasOne(c => c.Profile)
+                .WithMany()
+                .HasForeignKey(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         base.OnModelCreating(modelBuilder);

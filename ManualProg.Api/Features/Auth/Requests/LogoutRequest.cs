@@ -1,6 +1,6 @@
 ﻿namespace ManualProg.Api.Features.Auth.Requests;
 
-public record RefreshTokenRequest
+public record LogoutRequest
 {
     public required string RefreshToken { get; set; }
 }
