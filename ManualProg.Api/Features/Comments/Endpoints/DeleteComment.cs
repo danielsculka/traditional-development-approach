@@ -18,6 +18,8 @@ public class DeleteComment : IEndpoint
         CancellationToken cancellationToken
         )
     {
+        //TODO: rework comment deletion / should delete all replies in recursion
+
         var comment = await db.PostComments
             .FindAsync([id], cancellationToken);
 

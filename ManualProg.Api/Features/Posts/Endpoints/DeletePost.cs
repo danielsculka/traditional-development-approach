@@ -2,6 +2,7 @@
 using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManualProg.Api.Features.Posts.Endpoints;
 
@@ -19,10 +20,14 @@ public class DeletePost : IEndpoint
         )
     {
         var post = await db.Posts
-            .FindAsync([id], cancellationToken);
+            .Include(p => p.Comments)
+            .Where(p => p.Id == id)
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (post == null)
             throw new EntityNotFoundException();
+
+        db.PostComments.RemoveRange(post.Comments);
 
         db.Posts.Remove(post);
 

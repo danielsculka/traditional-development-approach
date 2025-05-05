@@ -63,7 +63,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         _ = modelBuilder.Entity<Post>(entity =>
         {
             entity.HasOne(c => c.Profile)
-                .WithMany()
+                .WithMany(c => c.Posts)
                 .HasForeignKey(c => c.ProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -94,7 +94,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         _ = modelBuilder.Entity<PostLike>(entity =>
         {
             entity.HasOne(c => c.Profile)
-                .WithMany()
+                .WithMany(c => c.PostLikes)
                 .HasForeignKey(c => c.ProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
@@ -107,20 +107,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(c => c.Profile)
-                .WithMany()
+                .WithMany(c => c.Comments)
                 .HasForeignKey(c => c.ProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(c => c.ReplyToComment)
                 .WithMany(c => c.Replies)
                 .HasForeignKey(c => c.ReplyToCommentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         _ = modelBuilder.Entity<PostCommentLike>(entity =>
         {
             entity.HasOne(c => c.Profile)
-                .WithMany()
+                .WithMany(c => c.CommentLikes)
                 .HasForeignKey(c => c.ProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
