@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManualProg.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250505142210_Initial")]
-    partial class Initial
+    [Migration("20250508103206_AddPostAccess")]
+    partial class AddPostAccess
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,7 +73,7 @@ namespace ManualProg.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.Post", b =>
@@ -89,6 +89,9 @@ namespace ManualProg.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("Modified")
                         .HasColumnType("datetime2");
 
@@ -102,11 +105,42 @@ namespace ManualProg.Api.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("ManualProg.Api.Data.Posts.PostAccess", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("PostAccess");
+                });
+
             modelBuilder.Entity("ManualProg.Api.Data.Posts.PostComment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -158,7 +192,7 @@ namespace ManualProg.Api.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("PostCommentLikes", (string)null);
+                    b.ToTable("PostCommentLikes");
                 });
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.PostImage", b =>
@@ -213,7 +247,7 @@ namespace ManualProg.Api.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("PostLikes", (string)null);
+                    b.ToTable("PostLikes");
                 });
 
             modelBuilder.Entity("ManualProg.Api.Data.Profiles.Profile", b =>
@@ -318,10 +352,29 @@ namespace ManualProg.Api.Migrations
             modelBuilder.Entity("ManualProg.Api.Data.Posts.Post", b =>
                 {
                     b.HasOne("ManualProg.Api.Data.Profiles.Profile", "Profile")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("ManualProg.Api.Data.Posts.PostAccess", b =>
+                {
+                    b.HasOne("ManualProg.Api.Data.Posts.Post", "Post")
+                        .WithMany("Accesses")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManualProg.Api.Data.Profiles.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
 
                     b.Navigation("Profile");
                 });
@@ -335,14 +388,15 @@ namespace ManualProg.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("ManualProg.Api.Data.Profiles.Profile", "Profile")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ManualProg.Api.Data.Posts.PostComment", "ReplyToComment")
                         .WithMany("Replies")
-                        .HasForeignKey("ReplyToCommentId");
+                        .HasForeignKey("ReplyToCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Post");
 
@@ -360,7 +414,7 @@ namespace ManualProg.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("ManualProg.Api.Data.Profiles.Profile", "Profile")
-                        .WithMany()
+                        .WithMany("CommentLikes")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -398,7 +452,7 @@ namespace ManualProg.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("ManualProg.Api.Data.Profiles.Profile", "Profile")
-                        .WithMany()
+                        .WithMany("PostLikes")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -430,6 +484,8 @@ namespace ManualProg.Api.Migrations
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.Post", b =>
                 {
+                    b.Navigation("Accesses");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Images");
@@ -446,6 +502,14 @@ namespace ManualProg.Api.Migrations
 
             modelBuilder.Entity("ManualProg.Api.Data.Profiles.Profile", b =>
                 {
+                    b.Navigation("CommentLikes");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("PostLikes");
+
+                    b.Navigation("Posts");
+
                     b.Navigation("User")
                         .IsRequired();
                 });

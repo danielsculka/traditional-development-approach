@@ -21,17 +21,16 @@ public class UnlikeComment : IEndpoint
     {
         var comment = await db.PostComments
             .Where(p => p.Id == id)
-            .Include(p => p.Likes)
+            .Include(p => p.Likes.Where(a => a.ProfileId == currentUser.ProfileId))
             .FirstOrDefaultAsync(cancellationToken);
 
         if (comment == null)
             throw new EntityNotFoundException();
 
-        var like = comment.Likes
-            .FirstOrDefault(l => l.ProfileId == currentUser.ProfileId);
-
-        if (like == null)
+        if (comment.Likes.Count != 0)
             throw new InvalidOperationException("comment.alreadyUnliked");
+
+        var like = comment.Likes.First();
 
         comment.Likes.Remove(like);
 

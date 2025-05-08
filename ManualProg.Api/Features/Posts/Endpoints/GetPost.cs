@@ -11,7 +11,7 @@ public class GetPost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/{id}", HandleAsync)
-        .WithSummary("Get post");
+        .WithSummary("Get a post");
 
     private static async Task<PostResponse> HandleAsync(
         [FromRoute] Guid id, 

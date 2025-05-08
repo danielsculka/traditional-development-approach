@@ -3,6 +3,7 @@ using ManualProg.Api.Features.Auth.Endpoints;
 using ManualProg.Api.Features.Comments.Endpoints;
 using ManualProg.Api.Features.Posts.Endpoints;
 using ManualProg.Api.Features.Profiles.Endpoints;
+using ManualProg.Api.Features.Users.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
@@ -32,6 +33,7 @@ public static class Endpoints
         endpoints.MapPostEndpoints();
         endpoints.MapCommentEndpoints();
         endpoints.MapProfileEndpoints();
+        endpoints.MapUserEndpoints();
     }
 
     private static void MapAuthEndpoints(this IEndpointRouteBuilder app)
@@ -56,16 +58,18 @@ public static class Endpoints
         endpoints.MapPublicGroup()
             .MapEndpoint<GetPosts>()
             .MapEndpoint<GetPost>()
-            .MapEndpoint<GetPostImage>();
+            .MapEndpoint<GetPostImage>()
+            .MapEndpoint<GetPostComments>();
 
         endpoints.MapAuthorizedGroup()
-            .MapEndpoint<DeleteProfile>();
+            .MapEndpoint<DeletePost>();
 
         endpoints.MapAuthorizedGroup([UserRole.Basic])
             .MapEndpoint<CreatePost>()
             .MapEndpoint<UpdatePost>()
             .MapEndpoint<LikePost>()
-            .MapEndpoint<UnlikePost>();
+            .MapEndpoint<UnlikePost>()
+            .MapEndpoint<PurchasePost>();
     }
 
     private static void MapCommentEndpoints(this IEndpointRouteBuilder app)
@@ -73,15 +77,16 @@ public static class Endpoints
         var endpoints = app.MapGroup("/comments")
             .WithTags("Comments");
 
-        // TODO: comment get
+        endpoints.MapPublicGroup()
+            .MapEndpoint<GetCommentReplies>();
+
+        endpoints.MapAuthorizedGroup()
+            .MapEndpoint<DeleteComment>();
 
         endpoints.MapAuthorizedGroup([UserRole.Basic])
             .MapEndpoint<CreateComment>()
             .MapEndpoint<LikeComment>()
             .MapEndpoint<UnlikeComment>();
-
-        endpoints.MapAuthorizedGroup()
-            .MapEndpoint<DeleteComment>();
     }
 
     private static void MapProfileEndpoints(this IEndpointRouteBuilder app)
@@ -90,10 +95,30 @@ public static class Endpoints
             .WithTags("Profiles");
 
         endpoints.MapPublicGroup()
+            .MapEndpoint<GetProfile>()
+            .MapEndpoint<GetProfilePosts>()
             .MapEndpoint<GetProfileImage>();
+
+        endpoints.MapAuthorizedGroup()
+            .MapEndpoint<GetProfileCoinTransactions>()
+            .MapEndpoint<DeleteProfile>();
 
         endpoints.MapAuthorizedGroup([UserRole.Basic])
             .MapEndpoint<UpdateProfile>();
+    }
+
+    private static void MapUserEndpoints(this IEndpointRouteBuilder app)
+    {
+        var endpoints = app.MapGroup("/users")
+            .WithTags("Users");
+
+        endpoints.MapAuthorizedGroup([UserRole.Administrator, UserRole.Moderator])
+            .MapEndpoint<GetUsers>();
+
+        endpoints.MapAuthorizedGroup([UserRole.Administrator])
+            .MapEndpoint<CreateUser>()
+            .MapEndpoint<UpdateUser>()
+            .MapEndpoint<DeleteUser>();
     }
 
     private static RouteGroupBuilder MapPublicGroup(this IEndpointRouteBuilder app, string? prefix = null)

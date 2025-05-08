@@ -15,6 +15,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Profile> Profiles { get; set; }
+    public DbSet<CoinTransaction> CoinTransactions { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<PostLike> PostLikes { get; set; }
     public DbSet<PostComment> PostComments { get; set; }
@@ -47,8 +48,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         _ = modelBuilder.Entity<CoinTransaction>(entity =>
         {
-            entity.ToTable("CoinTransactions");
-
             entity.HasOne(c => c.SenderProfile)
                 .WithMany()
                 .HasForeignKey(c => c.SenderProfileId)

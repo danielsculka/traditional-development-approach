@@ -1,4 +1,5 @@
 ﻿using ManualProg.Api.Data;
+using ManualProg.Api.Data.Images;
 using ManualProg.Api.Data.Profiles;
 using ManualProg.Api.Data.Users;
 using ManualProg.Api.Features.Auth.Requests;
@@ -49,6 +50,7 @@ public class Register : IEndpoint
             Role = UserRole.Basic,
             Profile = new Profile
             {
+                Id = Guid.NewGuid(),
                 Name = request.Profile.Name,
                 Description = request.Profile.Description
             }
@@ -62,8 +64,9 @@ public class Register : IEndpoint
             using var ms = new MemoryStream();
             await request.Profile.Image.CopyToAsync(ms, cancellationToken);
 
-            user.Profile.Image = new Data.Images.Image
+            user.Profile.Image = new Image
             {
+                Id = Guid.NewGuid(),
                 Content = ms.ToArray()
             };
         }

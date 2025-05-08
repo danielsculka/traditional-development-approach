@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManualProg.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250505165631_ReworkCommentOnDelete")]
-    partial class ReworkCommentOnDelete
+    [Migration("20250508105048_AddPostPrice")]
+    partial class AddPostPrice
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,8 +89,14 @@ namespace ManualProg.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("Modified")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
@@ -100,6 +106,33 @@ namespace ManualProg.Api.Migrations
                     b.HasIndex("ProfileId");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("ManualProg.Api.Data.Posts.PostAccess", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("PostAccess");
                 });
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.PostComment", b =>
@@ -330,12 +363,31 @@ namespace ManualProg.Api.Migrations
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("ManualProg.Api.Data.Posts.PostAccess", b =>
+                {
+                    b.HasOne("ManualProg.Api.Data.Posts.Post", "Post")
+                        .WithMany("Accesses")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManualProg.Api.Data.Profiles.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Profile");
+                });
+
             modelBuilder.Entity("ManualProg.Api.Data.Posts.PostComment", b =>
                 {
                     b.HasOne("ManualProg.Api.Data.Posts.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ManualProg.Api.Data.Profiles.Profile", "Profile")
@@ -347,7 +399,7 @@ namespace ManualProg.Api.Migrations
                     b.HasOne("ManualProg.Api.Data.Posts.PostComment", "ReplyToComment")
                         .WithMany("Replies")
                         .HasForeignKey("ReplyToCommentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Post");
 
@@ -435,6 +487,8 @@ namespace ManualProg.Api.Migrations
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.Post", b =>
                 {
+                    b.Navigation("Accesses");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Images");

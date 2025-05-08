@@ -2,18 +2,19 @@
 using ManualProg.Api.Data.Extensions;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Posts.Requests;
-using ManualProg.Api.Features.Posts.Responses;
+using ManualProg.Api.Features.Profiles.Responses;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManualProg.Api.Features.Posts.Endpoints;
+namespace ManualProg.Api.Features.Profiles.Endpoints;
 
-public class GetPosts : IEndpoint
+public class GetProfilePosts : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
-        .MapGet("/", HandleAsync)
-        .WithSummary("Get posts");
+        .MapGet("/{id}/posts", HandleAsync)
+        .WithSummary("Get a profile posts");
 
-    private static async Task<PagedList<PostResponse>> HandleAsync(
+    private static async Task<PagedList<ProfilePostResponse>> HandleAsync(
+        [FromRoute] Guid id,
         [AsParameters] GetPostsRequest request,
         [FromServices] AppDbContext db,
         [FromServices] CurrentUserService currentUser,
@@ -21,8 +22,9 @@ public class GetPosts : IEndpoint
         )
     {
         var result = await db.Posts
+            .Where(p => p.ProfileId == id)
             .OrderByDescending(c => c.Created)
-            .Select(post => new PostResponse
+            .Select(post => new ProfilePostResponse
             {
                 Id = post.Id,
                 ImageIds = post.Images
@@ -31,12 +33,6 @@ public class GetPosts : IEndpoint
                 Description = post.Description,
                 CommentCount = post.Comments.Count,
                 LikeCount = post.Likes.Count,
-                Profile = new PostResponse.ProfileData
-                {
-                    Id = post.Profile.Id,
-                    Name = post.Profile.Name,
-                    HasImage = post.Profile.Image != null
-                },
                 Created = post.Created
             })
             .ToPagedArrayAsync(request, cancellationToken);

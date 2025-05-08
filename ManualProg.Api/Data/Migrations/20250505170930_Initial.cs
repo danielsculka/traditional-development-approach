@@ -131,6 +131,7 @@ namespace ManualProg.Api.Migrations
                     PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ReplyToCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -141,7 +142,8 @@ namespace ManualProg.Api.Migrations
                         name: "FK_PostComments_PostComments_ReplyToCommentId",
                         column: x => x.ReplyToCommentId,
                         principalTable: "PostComments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PostComments_Posts_PostId",
                         column: x => x.PostId,

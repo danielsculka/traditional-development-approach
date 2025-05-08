@@ -4,11 +4,22 @@ namespace ManualProg.Api.Data.CoinTransactions;
 
 public class CoinTransaction : Entity<Guid>
 {
-    public required Guid SenderProfileId { get; set; }
-    public virtual Profile SenderProfile { get; set; } = null!;
+    public CoinTransaction(Profile sender, Profile receiver, int amount)
+    {
+        Id = Guid.NewGuid();
+        SenderProfile = sender;
+        ReceiverProfile = receiver;
+        Amount = amount;
 
-    public required Guid ReceiverProfileId { get; set; }
-    public virtual Profile ReceiverProfile { get; set; } = null!;
+        SenderProfile.Coins -= amount;
+        ReceiverProfile.Coins += amount;
+    }
 
-    public required int Amount { get; set; }
+    public Guid SenderProfileId { get; init; }
+    public virtual Profile SenderProfile { get; init; }
+
+    public Guid ReceiverProfileId { get; init; }
+    public virtual Profile ReceiverProfile { get; init; }
+
+    public int Amount { get; init; }
 }

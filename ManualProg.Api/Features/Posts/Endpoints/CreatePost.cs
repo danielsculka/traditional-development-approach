@@ -40,22 +40,25 @@ public class CreatePost : IEndpoint
             {
                 Image = new Image
                 {
+                    Id = Guid.NewGuid(),
                     Content = ms.ToArray()
                 }
             });
         }
 
-        var entity = new Post
+        var post = new Post
         {
+            Id = Guid.NewGuid(),
+            IsPublic = request.IsPublic,
             Description = request.Description,
             ProfileId = currentUser.ProfileId!.Value,
             Images = images
         };
 
-        _ = db.Posts.Add(entity);
+        _ = db.Posts.Add(post);
 
         _ = await db.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        return post.Id;
     }
 }

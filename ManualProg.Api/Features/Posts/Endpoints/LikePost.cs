@@ -22,17 +22,18 @@ public class LikePost : IEndpoint
     {
         var post = await db.Posts
             .Where(post => post.Id == id)
-            .Include(p => p.Likes)
+            .Include(p => p.Likes.Where(a => a.ProfileId == currentUser.ProfileId))
             .FirstOrDefaultAsync(cancellationToken);
 
         if (post == null)
             throw new EntityNotFoundException();
 
-        if (post.Likes.Any(l => l.ProfileId == currentUser.ProfileId))
+        if (post.Likes.Count != 0)
             throw new InvalidOperationException("post.alreadyLiked");
 
         post.Likes.Add(new PostLike
         {
+            Id = Guid.NewGuid(),
             ProfileId = currentUser.ProfileId!.Value,
         });
 

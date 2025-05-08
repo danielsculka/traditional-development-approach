@@ -4,13 +4,13 @@ using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ManualProg.Api.Features.Posts.Endpoints;
+namespace ManualProg.Api.Features.Users.Endpoints;
 
-public class UnlikePost : IEndpoint
+public class DeleteUser : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
-        .MapPost("/{id}/unlike", HandleAsync)
-        .WithSummary("Unlike a post");
+        .MapDelete("/{id}", HandleAsync)
+        .WithSummary("Delete a user");
 
     private static async Task HandleAsync(
         [FromRoute] Guid id,
@@ -19,20 +19,14 @@ public class UnlikePost : IEndpoint
         CancellationToken cancellationToken
         )
     {
-        var post = await db.Posts
-            .Where(post => post.Id == id)
-            .Include(p => p.Likes.Where(a => a.ProfileId == currentUser.ProfileId))
+        var user = await db.Users
+            .Where(p => p.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (post == null)
+        if (user == null)
             throw new EntityNotFoundException();
 
-        if (post.Likes.Count != 0)
-            throw new InvalidOperationException("post.alreadyUnliked");
-
-        var like = post.Likes.First();
-
-        post.Likes.Remove(like);
+        db.Users.Remove(user);
 
         _ = await db.SaveChangesAsync(cancellationToken);
     }

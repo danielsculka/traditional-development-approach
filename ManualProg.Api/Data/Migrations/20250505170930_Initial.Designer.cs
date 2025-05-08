@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManualProg.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250505164757_ReworkComment")]
-    partial class ReworkComment
+    [Migration("20250505170930_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -347,7 +347,7 @@ namespace ManualProg.Api.Migrations
                     b.HasOne("ManualProg.Api.Data.Posts.PostComment", "ReplyToComment")
                         .WithMany("Replies")
                         .HasForeignKey("ReplyToCommentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Post");
 

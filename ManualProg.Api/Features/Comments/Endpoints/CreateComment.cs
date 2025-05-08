@@ -34,6 +34,7 @@ public class CreateComment : IEndpoint
 
         var comment = new PostComment
         {
+            Id = Guid.NewGuid(),
             PostId = request.PostId,
             ProfileId = currentUser.ProfileId!.Value,
             ReplyToCommentId = request.ReplyToCommentId,

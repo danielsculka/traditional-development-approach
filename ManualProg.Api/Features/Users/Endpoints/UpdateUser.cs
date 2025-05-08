@@ -1,12 +1,13 @@
 ﻿using ManualProg.Api.Data;
+using ManualProg.Api.Data.Users;
 using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
-using ManualProg.Api.Features.Posts.Requests;
+using ManualProg.Api.Features.Users.Requests;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManualProg.Api.Features.Posts.Endpoints;
+namespace ManualProg.Api.Features.Users.Endpoints;
 
-public class UpdatePost : IEndpoint
+public class UpdateUser : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPut("/{id}", HandleAsync)
@@ -14,19 +15,22 @@ public class UpdatePost : IEndpoint
 
     private static async Task HandleAsync(
         [FromRoute] Guid id,
-        [FromBody] UpdatePostRequest request,
+        [FromBody] UpdateUserRequest request,
         [FromServices] AppDbContext db,
         [FromServices] CurrentUserService currentUser,
         CancellationToken cancellationToken
         )
     {
-        var post = await db.Posts
+        if (request.Role == UserRole.Basic)
+            throw new InvalidOperationException("user.cannotCreateUserWithRoleBasic");
+
+        var user = await db.Users
             .FindAsync([id], cancellationToken);
 
-        if (post == null)
+        if (user == null)
             throw new EntityNotFoundException();
 
-        post.Description = request.Description;
+        user.Role = request.Role;
 
         _ = await db.SaveChangesAsync(cancellationToken);
     }

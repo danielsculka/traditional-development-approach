@@ -27,8 +27,4 @@
     <ProjectReference Include="..\ManualProg.ServiceDefaults\ManualProg.ServiceDefaults.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Users\" />
-  </ItemGroup>
-
 </Project>
