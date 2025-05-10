@@ -15,7 +15,7 @@ public class DeleteUser : IEndpoint
     private static async Task HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

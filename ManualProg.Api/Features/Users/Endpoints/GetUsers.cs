@@ -1,7 +1,6 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Data.Extensions;
 using ManualProg.Api.Features.Auth.Services;
-using ManualProg.Api.Features.Posts.Responses;
 using ManualProg.Api.Features.Users.Requests;
 using ManualProg.Api.Features.Users.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,7 @@ public class GetUsers : IEndpoint
     private static async Task<PagedList<UserResponse>> HandleAsync(
         [AsParameters] GetUsersRequest request,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

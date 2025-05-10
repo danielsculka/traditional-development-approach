@@ -16,7 +16,7 @@ public class GetPosts : IEndpoint
     private static async Task<PagedList<PostResponse>> HandleAsync(
         [AsParameters] GetPostsRequest request,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

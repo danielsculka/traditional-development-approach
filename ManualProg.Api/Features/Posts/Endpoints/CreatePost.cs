@@ -19,7 +19,7 @@ public class CreatePost : IEndpoint
     private static async Task<Guid> HandleAsync(
         [FromForm] CreatePostRequest request, 
         [FromServices] AppDbContext db, 
-        [FromServices] CurrentUserService currentUser, 
+        [FromServices] ICurrentUser currentUser, 
         CancellationToken cancellationToken
         )
     {

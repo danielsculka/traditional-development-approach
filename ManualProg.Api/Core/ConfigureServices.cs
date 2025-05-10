@@ -28,8 +28,7 @@ public static class ConfigureServices
         });
 
         builder.Services.AddHttpContextAccessor();
-
-        _ = builder.Services.AddScoped<CurrentUserService>();
+        builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
         builder.AddCors();
 

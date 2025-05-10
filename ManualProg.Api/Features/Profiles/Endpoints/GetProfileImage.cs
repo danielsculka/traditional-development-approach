@@ -10,13 +10,13 @@ namespace ManualProg.Api.Features.Profiles.Endpoints;
 public class GetProfileImage : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
-        .MapGet("/{id}", HandleAsync)
+        .MapGet("/{id}/image", HandleAsync)
         .WithSummary("Get profile image");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

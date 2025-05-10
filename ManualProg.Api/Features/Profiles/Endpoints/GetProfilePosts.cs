@@ -17,7 +17,7 @@ public class GetProfilePosts : IEndpoint
         [FromRoute] Guid id,
         [AsParameters] GetPostsRequest request,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

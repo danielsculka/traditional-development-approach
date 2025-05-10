@@ -17,7 +17,7 @@ public class CreateUser : IEndpoint
     private static async Task<Guid> HandleAsync(
         [FromForm] CreateUserRequest request, 
         [FromServices] AppDbContext db, 
-        [FromServices] CurrentUserService currentUser, 
+        [FromServices] ICurrentUser currentUser, 
         CancellationToken cancellationToken
         )
     {

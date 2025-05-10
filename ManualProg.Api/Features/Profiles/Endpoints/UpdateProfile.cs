@@ -1,6 +1,5 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Data.Images;
-using ManualProg.Api.Data.Users;
 using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Profiles.Requests;
@@ -21,7 +20,7 @@ public class UpdateProfile : IEndpoint
         [FromRoute] Guid id,
         [FromBody] UpdateProfileRequest request,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

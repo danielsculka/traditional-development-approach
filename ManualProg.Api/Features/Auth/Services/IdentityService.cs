@@ -22,9 +22,11 @@ public class IdentityService(IOptions<AuthOptions> options)
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Role, user.Role.ToString()),
-            new(ClaimTypesExtensions.ProfileId, user.ProfileId?.ToString())
+            new(ClaimTypes.Role, user.Role.ToString())
         };
+
+        if (user.ProfileId.HasValue)
+            claims.Add(new(ClaimTypesExtensions.ProfileId, user.ProfileId.Value.ToString()));
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

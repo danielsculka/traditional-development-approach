@@ -17,7 +17,7 @@ public class CreateComment : IEndpoint
     private static async Task<Guid> HandleAsync(
         [FromBody] CreateCommentRequest request, 
         [FromServices] AppDbContext db, 
-        [FromServices] CurrentUserService currentUser, 
+        [FromServices] ICurrentUser currentUser, 
         CancellationToken cancellationToken
         )
     {

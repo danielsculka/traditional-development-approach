@@ -10,13 +10,13 @@ namespace ManualProg.Api.Features.Posts.Endpoints;
 public class GetPostImage : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
-        .MapGet("/{id}", HandleAsync)
+        .MapGet("/images/{id}", HandleAsync)
         .WithSummary("Get a post image");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

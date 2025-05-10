@@ -16,7 +16,7 @@ public class GetProfile : IEndpoint
     private static async Task<ProfileResponse> HandleAsync(
         [FromRoute] Guid id, 
         [FromServices] AppDbContext db, 
-        [FromServices] CurrentUserService currentUser, 
+        [FromServices] ICurrentUser currentUser, 
         CancellationToken cancellationToken
         )
     {

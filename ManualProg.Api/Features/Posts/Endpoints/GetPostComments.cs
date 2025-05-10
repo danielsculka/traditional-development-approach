@@ -17,7 +17,7 @@ public class GetPostComments : IEndpoint
         [FromRoute] Guid id,
         [AsParameters] GetCommentsRequest request,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {

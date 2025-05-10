@@ -16,7 +16,7 @@ public class GetPost : IEndpoint
     private static async Task<PostResponse> HandleAsync(
         [FromRoute] Guid id, 
         [FromServices] AppDbContext db, 
-        [FromServices] CurrentUserService currentUser, 
+        [FromServices] ICurrentUser currentUser, 
         CancellationToken cancellationToken
         )
     {

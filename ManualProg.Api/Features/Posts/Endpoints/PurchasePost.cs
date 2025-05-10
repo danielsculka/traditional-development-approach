@@ -17,7 +17,7 @@ public class PurchasePost : IEndpoint
     private static async Task HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {
@@ -39,7 +39,17 @@ public class PurchasePost : IEndpoint
         if (buyerProfile!.Coins < post.Price)
             throw new InvalidOperationException("profile.insufficientCoins");
 
-        db.CoinTransactions.Add(new CoinTransaction(buyerProfile, post.Profile, post.Price));
+        var transaction = new CoinTransaction {
+            Id = Guid.NewGuid(),
+            SenderProfile = buyerProfile,
+            ReceiverProfile = buyerProfile,
+            Amount = post.Price
+        };
+
+        db.CoinTransactions.Add(transaction);
+
+        transaction.SenderProfile.Coins -= transaction.Amount;
+        transaction.ReceiverProfile.Coins += transaction.Amount;
 
         post.Accesses.Add(new PostAccess
         {

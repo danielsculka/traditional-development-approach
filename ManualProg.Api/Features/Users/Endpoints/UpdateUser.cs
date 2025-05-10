@@ -17,7 +17,7 @@ public class UpdateUser : IEndpoint
         [FromRoute] Guid id,
         [FromBody] UpdateUserRequest request,
         [FromServices] AppDbContext db,
-        [FromServices] CurrentUserService currentUser,
+        [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {
