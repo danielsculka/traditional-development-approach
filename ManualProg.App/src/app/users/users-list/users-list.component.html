@@ -1,0 +1,24 @@
+<table mat-table [dataSource]="items">
+  <ng-container matColumnDef="username">
+    <th mat-header-cell *matHeaderCellDef>Username</th>
+    <td mat-cell *matCellDef="let n">{{ n.username }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="role">
+    <th mat-header-cell *matHeaderCellDef>Role</th>
+    <td mat-cell *matCellDef="let n">{{ n.role }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="profile">
+    <th mat-header-cell *matHeaderCellDef>Profile</th>
+    <td mat-cell *matCellDef="let n">{{ n.profile?.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="created">
+    <th mat-header-cell *matHeaderCellDef>Created</th>
+    <td mat-cell *matCellDef="let n">{{ n.created | date }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

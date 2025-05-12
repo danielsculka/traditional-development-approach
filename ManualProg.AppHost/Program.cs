@@ -22,7 +22,7 @@ var api = builder.AddProject<Projects.ManualProg_Api>("api")
 builder.AddNpmApp("app", "../ManualProg.App")
     .WithReference(api)
     .WaitFor(api)
-    .WithHttpEndpoint(env: "PORT")
+    .WithHttpEndpoint(port: 4200, env: "PORT")
     .WithExternalHttpEndpoints()
     .PublishAsDockerFile();
 

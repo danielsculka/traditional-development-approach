@@ -44,8 +44,9 @@ public class RefreshToken : IEndpoint
             AccessToken = identityManager.GenerateToken(user),
             RefreshToken = user.RefreshToken,
             UserId = user.Id,
-            UserName = user.Username,
-            UserRole = user.Role
+            Username = user.Username,
+            UserRole = user.Role,
+            ProfileId = user.ProfileId
         };
     }
 }

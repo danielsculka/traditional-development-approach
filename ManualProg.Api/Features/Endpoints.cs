@@ -27,7 +27,8 @@ public static class Endpoints
     public static void MapEndpoints(this WebApplication app)
     {
         var endpoints = app.MapGroup("")
-            .WithOpenApi();
+            .WithOpenApi()
+            .DisableAntiforgery();
 
         endpoints.MapAuthEndpoints();
         endpoints.MapPostEndpoints();
@@ -43,10 +44,10 @@ public static class Endpoints
 
         endpoints.MapPublicGroup()
             .MapEndpoint<Register>()
-            .MapEndpoint<Login>();
+            .MapEndpoint<Login>()
+            .MapEndpoint<RefreshToken>();
 
         endpoints.MapAuthorizedGroup()
-            .MapEndpoint<RefreshToken>()
             .MapEndpoint<Logout>();
     }
 

@@ -50,6 +50,7 @@ public class CreatePost : IEndpoint
         {
             Id = Guid.NewGuid(),
             IsPublic = request.IsPublic,
+            Price = request.Price,
             Description = request.Description,
             ProfileId = currentUser.ProfileId!.Value,
             Images = images

@@ -1,0 +1,22 @@
+<div class="file-upload-input-container"
+  [attr.aria-labelledby]="_formField?.getLabelId()"
+  (focusin)="onFocusIn()"
+  (focusout)="onFocusOut($event)"
+>
+  <input type="file" class="file-input"
+    (change)="onFileSelected($event)"
+    accept="image/png" [multiple]="multiple"
+    #file >
+
+  <div class="file-preview" (click)="file.click()">
+    <ng-container *ngIf="!filePreviewUrls.length">
+      Select photo
+    </ng-container>
+
+    <ng-container *ngIf="filePreviewUrls.length">
+      @for (url of filePreviewUrls; track $index) {
+        <img [src]="url">
+      }
+    </ng-container>
+  </div>
+</div>

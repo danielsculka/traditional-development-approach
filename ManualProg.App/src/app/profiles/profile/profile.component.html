@@ -1,0 +1,41 @@
+<div #scrollBox class="main-container" (scroll)="onScroll(scrollBox)">
+  <div class="container">
+    <div class="profile">
+      <div class="image">
+        <img [src]="profileImage">
+      </div>
+
+      <div class="details">
+        <div class="name">
+          {{ profile.name }}
+
+          <div></div>
+        </div>
+
+        <div class="counter">
+          <span class="count">{{ profile.postCount }}</span> posts
+        </div>
+
+        <div class="description">
+          {{ profile.description }}
+        </div>
+      </div>
+    </div>
+
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" animationDuration="0">
+      <mat-tab label="Posts">
+        <div class="posts">
+          @for (post of posts; track post.id) {
+            <div class="post">
+              <img [src]="postsImages[post.id]">
+            </div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Transactions">
+
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

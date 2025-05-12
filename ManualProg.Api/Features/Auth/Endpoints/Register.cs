@@ -21,7 +21,7 @@ public class Register : IEndpoint
     private static readonly string[] AcceptedImageTypes = [MediaTypeNames.Image.Png, MediaTypeNames.Image.Jpeg];
 
     private static async Task<TokenResponse> HandleAsync(
-        [FromBody] RegisterRequest request,
+        [FromForm] RegisterRequest request,
         [FromServices] AppDbContext db,
         [FromServices] IdentityService identityManager,
         CancellationToken cancellationToken
@@ -91,8 +91,9 @@ public class Register : IEndpoint
             AccessToken = identityManager.GenerateToken(user),
             RefreshToken = user.RefreshToken,
             UserId = user.Id,
-            UserName = user.Username,
-            UserRole = user.Role
+            Username = user.Username,
+            UserRole = user.Role,
+            ProfileId = user.ProfileId
         };
     }
 }

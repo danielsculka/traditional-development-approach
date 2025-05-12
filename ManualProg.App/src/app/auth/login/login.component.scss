@@ -1,0 +1,22 @@
+.container {
+  .bordered {
+    padding: 10px 40px;
+
+    &.log-in {
+      button {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 15px;
+      }
+    }
+
+    &.sign-up {
+      padding: 25px 40px;
+    }
+  }
+
+  mat-form-field {
+    margin-bottom: 6px;
+    width: 100%;
+  }
+}

@@ -1,0 +1,61 @@
+<div class="main-container small">
+  <div class="container">
+    <div class="bordered sign-up">
+      <h1 class="text-h-ceneter">Manual prog</h1>
+
+      <h3 class="text-h-ceneter">
+        Sign up to see photos and videos from your friends.
+      </h3>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" type="email">
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password">
+          </mat-form-field>
+        </div>
+
+        <h3 class="text-h-ceneter">Profile</h3>
+
+        <form formGroupName="profile">
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name">
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Description</mat-label>
+              <input matInput formControlName="description">
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Image</mat-label>
+              <app-file-upload-input formControlName="images" />
+            </mat-form-field>
+          </div>
+        </form>
+
+        <button mat-flat-button type="submit">Sign Up</button>
+      </form>
+    </div>
+
+    <div class="bordered log-in">
+      <div class="text-h-ceneter">Have an account?</div>
+      <div class="h-center">
+        <a routerLink="/auth/login">Log in</a>
+      </div>
+    </div>
+  </div>
+</div>

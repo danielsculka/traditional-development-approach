@@ -1,0 +1,32 @@
+<div class="main-container small">
+  <div class="container">
+    <div class="bordered log-in">
+      <h1 class="text-h-ceneter">Manual prog</h1>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" type="email">
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password">
+          </mat-form-field>
+        </div>
+
+        <button mat-flat-button type="submit">Log in</button>
+      </form>
+    </div>
+
+    <div class="bordered sign-up">
+      <div class="text-h-ceneter">
+        Don't have an account?
+        <a routerLink="/auth/register">Sign up</a>
+      </div>
+    </div>
+  </div>
+</div>

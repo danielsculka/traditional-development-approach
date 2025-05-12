@@ -13,7 +13,7 @@ public class CurrentUser : ICurrentUser
             return;
 
         Id = Guid.Parse(claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        UserName = claimsPrincipal.FindFirstValue(ClaimTypes.Name)!;
+        Username = claimsPrincipal.FindFirstValue(ClaimTypes.Name)!;
         Role = Enum.Parse<UserRole>(claimsPrincipal.FindFirstValue(ClaimTypes.Role)!);
 
         var profileId = claimsPrincipal.FindFirstValue(ClaimTypesExtensions.ProfileId);
@@ -23,7 +23,7 @@ public class CurrentUser : ICurrentUser
     }
 
     public Guid Id { get; }
-    public string UserName { get; } = string.Empty;
+    public string Username { get; } = string.Empty;
     public UserRole Role { get; }
     public Guid? ProfileId { get; }
 }

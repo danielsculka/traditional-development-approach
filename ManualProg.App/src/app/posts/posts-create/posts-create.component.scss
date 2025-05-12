@@ -1,0 +1,37 @@
+.container form {
+  margin-top: 25px;
+  display: flex;
+
+  .images {
+    width: 60%;
+
+    ::ng-deep .file-upload-input-container {
+      min-height: 350px;
+    }
+  }
+
+  .other {
+    flex: 1;
+    margin-left: 15px;
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 25px;
+
+      .description {
+        margin-bottom: 25px;
+        min-height: 150px;
+      }
+
+      .public {
+        margin-bottom: 15px;
+      }
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: row-reverse;
+    }
+  }
+}

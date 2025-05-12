@@ -1,0 +1,27 @@
+<div class="navigation" [ngClass]="{ 'visible' : visible }">
+  <div class="navigation-title">Manual prog</div>
+
+  <div class="navigations">
+    @for (item of visibleItems; track item.title) {
+      <a class="navigation-item" [routerLink]="item.path ? item.path : item.dynamicPath()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>{{ item.icon }}</mat-icon>
+
+        <div class="navigation-item-title">
+          {{ item.title}}
+        </div>
+      </a>
+    }
+  </div>
+
+  <div class="auth">
+    <a routerLink="/auth/login" *ngIf="!isAuth">
+      <mat-icon>login</mat-icon>
+      <div>Log in</div>
+    </a>
+
+    <a href="/" (click)="$event.preventDefault(); logout()" *ngIf="isAuth">
+      <mat-icon>logout</mat-icon>
+      <div>Log out</div>
+    </a>
+  </div>
+</div>

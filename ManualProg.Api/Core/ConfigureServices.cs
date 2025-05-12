@@ -1,8 +1,10 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Features.Auth;
 using ManualProg.Api.Features.Auth.Services;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace ManualProg.Api.Core;
 
@@ -33,6 +35,10 @@ public static class ConfigureServices
         builder.AddCors();
 
         builder.AddJwtAuthentication();
+
+        builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+        builder.Services.AddMemoryCache();
     }
 
     private static void AddSwagger(this WebApplicationBuilder builder)
@@ -49,9 +55,10 @@ public static class ConfigureServices
     {
         builder.Services.AddCors(o => o.AddPolicy("policy", builder =>
         {
-            builder.AllowAnyOrigin()
+            builder.WithOrigins("http://localhost:4200")
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         }));
     }
 
