@@ -1,0 +1,11 @@
+<div class="images" [ngClass]="{ 'solo' : !isIndependent }">
+  <ng-container *ngIf="isIndependent">
+    @for (imageId of post.imageIds; track imageId) {
+      <img [src]="postImages[imageId]">
+    }
+  </ng-container>
+
+  <ng-container *ngIf="!isIndependent">
+    <img (click)="onExpand.emit()" style="cursor: pointer" [src]="postImages[post.imageIds[0]]">
+  </ng-container>
+</div>

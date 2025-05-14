@@ -1,0 +1,20 @@
+.actions {
+  display: flex;
+  align-items: center;
+  color: rgb(53, 53, 53);
+
+  .action {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px 12px 0;
+    cursor: pointer;
+
+    &.liked {
+      color: rgb(172, 31, 31);
+    }
+
+    .mat-icon {
+      margin-right: 8px;
+    }
+  }
+}

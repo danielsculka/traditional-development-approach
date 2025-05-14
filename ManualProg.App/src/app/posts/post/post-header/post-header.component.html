@@ -1,0 +1,9 @@
+  <div class="header" [routerLink]="'/profiles/' + profile.id">
+    <img [src]="profileImage">
+
+    <div class="details">
+      <span class="name">{{ profile.name }}</span>
+
+      <span class="date"> • {{ post.created | date }}</span>
+    </div>
+  </div>

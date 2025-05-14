@@ -1,0 +1,52 @@
+.post {
+  display: flex;
+  width: min(1000px, 80vw);
+
+  .images {
+    width: 60%;
+  }
+
+  .details {
+    box-sizing: border-box;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    ::ng-deep .header {
+      padding: 15px;
+      border-bottom: 1px solid rgb(219, 219, 219);
+    }
+
+    ::ng-deep .description {
+      border: unset;
+      padding: 0px 15px;
+    }
+
+    .comments {
+      padding: 5px 15px 15px 15px;
+      flex: 1;
+    }
+
+    ::ng-deep .actions {
+      padding: 10px 15px 5px 15px;
+      border-top: 1px solid rgb(219, 219, 219);
+    }
+
+    .new-comment {
+      border-top: 1px solid rgb(219, 219, 219);
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      padding: 0 5px 10px 10px;
+
+      .mat-mdc-form-field {
+        flex: 1;
+
+        ::ng-deep .mdc-text-field {
+          border: 0 !important;
+        }
+      }
+    }
+  }
+}

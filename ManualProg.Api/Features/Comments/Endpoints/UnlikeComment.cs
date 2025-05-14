@@ -27,7 +27,7 @@ public class UnlikeComment : IEndpoint
         if (comment == null)
             throw new EntityNotFoundException();
 
-        if (comment.Likes.Count != 0)
+        if (comment.Likes.Count == 0)
             throw new InvalidOperationException("comment.alreadyUnliked");
 
         var like = comment.Likes.First();

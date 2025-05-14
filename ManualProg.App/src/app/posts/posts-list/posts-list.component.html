@@ -2,37 +2,7 @@
   <div class="container">
     <div class="posts">
       @for (post of posts; track post.id) {
-        <div class="post">
-          <div class="header" [routerLink]="'/profiles/' + post.profile.id">
-            <img [src]="profileImages[post.profile.id]">
-
-            <div class="details">
-              <span class="name">{{ post.profile.name }}</span>
-
-              <span class="date"> • {{ post.created | date }}</span>
-            </div>
-          </div>
-
-          <div class="images">
-            @for (imageId of post.imageIds; track imageId) {
-              <img [src]="postsImages[imageId]">
-            }
-          </div>
-
-          <div class="actions">
-            <div class="action">
-              <mat-icon>favorite</mat-icon> {{ post.likeCount}}
-            </div>
-
-            <div class="action">
-              <mat-icon>chat</mat-icon> {{ post.commentCount}}
-            </div>
-          </div>
-
-          <div class="description">
-            <span class="name">{{ post.profile.name }}</span> {{ post.description }}
-          </div>
-        </div>
+        <app-post [post]="post"></app-post>
       }
     </div>
   </div>

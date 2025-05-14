@@ -37,8 +37,6 @@ public static class ConfigureServices
         builder.AddJwtAuthentication();
 
         builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
-        builder.Services.AddMemoryCache();
     }
 
     private static void AddSwagger(this WebApplicationBuilder builder)

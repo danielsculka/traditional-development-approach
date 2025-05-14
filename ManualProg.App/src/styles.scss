@@ -26,6 +26,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --mat-form-field-container-padding-top: 8px;
   --mat-form-field-container-height: 36px;
   --mat-form-field-hover-state-layer-opacity: 0;
+  --mat-dialog-container-max-width: 1000px;
 }
 
 .main-container {
@@ -102,4 +103,8 @@ h3 {
 
 .mdc-line-ripple {
   display: none;
+}
+
+.mat-mdc-dialog-surface {
+  border-radius: 0 !important;
 }

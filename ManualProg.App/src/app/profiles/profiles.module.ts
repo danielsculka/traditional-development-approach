@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfilesRoutingModule } from './profiles-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PostsModule } from '../posts/posts.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatInputModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatTabsModule
+    MatTabsModule,
+    PostsModule
   ]
 })
 export class ProfilesModule { }

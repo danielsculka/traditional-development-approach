@@ -4,7 +4,7 @@ export class Utils {
       if (!obj.hasOwnProperty(key) || obj[key] === undefined) continue;
 
       const value = obj[key];
-      const formKey = parentKey ? `${parentKey}[${key}]` : key;
+      const formKey = parentKey ? `${parentKey}.${key}` : key;
 
       if (value instanceof File) {
         formData.append(formKey, value);

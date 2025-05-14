@@ -1,0 +1,11 @@
+<div class="post">
+  <app-post-header *ngIf="isIndependent " [post]="post"></app-post-header>
+
+  <app-post-images [post]="post" (onExpand)="openModal()"></app-post-images>
+
+  <ng-container *ngIf="isIndependent">
+    <app-post-actions [post]="post" (onComment)="openModal()" (likeChanged)="onLikeChange()"></app-post-actions>
+
+    <app-post-description [post]="post"></app-post-description>
+  </ng-container>
+</div>

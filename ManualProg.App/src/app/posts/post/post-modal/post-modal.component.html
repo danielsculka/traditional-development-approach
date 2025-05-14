@@ -1,0 +1,25 @@
+<div class="post" *ngIf="post">
+  <div class="images">
+    <app-post-images [post]="post"></app-post-images>
+  </div>
+
+  <div class="details">
+    <app-post-header [post]="post"></app-post-header>
+
+    <app-post-description [post]="post"></app-post-description>
+
+    <div class="comments">
+      comments ??
+    </div>
+
+    <app-post-actions [post]="post"></app-post-actions>
+
+    <form class="new-comment">
+      <mat-form-field appearance="fill">
+        <textarea matInput cdkTextareaAutosize placeholder="Add a comment..."></textarea>
+      </mat-form-field>
+
+      <button mat-button>Post</button>
+    </form>
+  </div>
+</div>

@@ -47,7 +47,7 @@ export class NavigationComponent {
 
   logout(): void {
     this._authService.logout().subscribe(() => {
-      this._router.navigateByUrl('/');
+      window.location.href = '/';
     });
   }
 }

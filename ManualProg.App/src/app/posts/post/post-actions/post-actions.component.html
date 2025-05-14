@@ -1,0 +1,9 @@
+<div class="actions">
+  <div class="action" (click)="hasLike ? unlike() : like()" [ngClass]="{ 'liked' : hasLike}">
+    <mat-icon>favorite</mat-icon> {{ post.likeCount}}
+  </div>
+
+  <div class="action" (click)="onComment.emit()">
+    <mat-icon>chat</mat-icon> {{ post.commentCount}}
+  </div>
+</div>

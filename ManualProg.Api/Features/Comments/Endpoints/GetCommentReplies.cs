@@ -30,6 +30,7 @@ public class GetCommentReplies : IEndpoint
                 Content = c.Content,
                 RepliesCount = c.Replies.Count,
                 LikeCount = c.Likes.Count,
+                HasLike = c.Likes.Any(l => l.ProfileId == currentUser.ProfileId),
                 Profile = new CommentResponse.ProfileData
                 {
                     Id = c.Profile.Id,

@@ -27,7 +27,7 @@
         <div class="posts">
           @for (post of posts; track post.id) {
             <div class="post">
-              <img [src]="postsImages[post.id]">
+              <app-post [post]="post"></app-post>
             </div>
           }
         </div>

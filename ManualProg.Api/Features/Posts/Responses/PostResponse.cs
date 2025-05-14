@@ -7,6 +7,7 @@ public record PostResponse
     public required string Description { get; set; }
     public required int CommentCount { get; set; }
     public required int LikeCount { get; set; }
+    public required bool HasLike { get; set; }
     public required ProfileData Profile { get; set; }
     public required DateTime Created { get; set; }
 

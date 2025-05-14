@@ -1,0 +1,11 @@
+.images {
+  img {
+    width: 100%;
+    aspect-ratio: 1 / 1.25;
+    object-fit: cover;
+  }
+
+  &.solo img{
+    aspect-ratio: 1 / 1.333;
+  }
+}

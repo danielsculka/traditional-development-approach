@@ -3,6 +3,7 @@ export interface ICommentResponse {
   content: string;
   repliesCount: number;
   likeCount: number;
+  hasLike: boolean;
   profile: ICommentResponseProfileData;
   created: Date;
 }

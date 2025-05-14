@@ -31,6 +31,7 @@ public class GetPosts : IEndpoint
                 Description = post.Description,
                 CommentCount = post.Comments.Count,
                 LikeCount = post.Likes.Count,
+                HasLike = post.Likes.Any(l => l.ProfileId == currentUser.ProfileId),
                 Profile = new PostResponse.ProfileData
                 {
                     Id = post.Profile.Id,

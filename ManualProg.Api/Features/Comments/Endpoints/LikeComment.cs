@@ -31,9 +31,10 @@ public class LikeComment : IEndpoint
         if (comment.Likes.Count != 0)
             throw new InvalidOperationException("comment.alreadyLiked");
 
-        comment.Likes.Add(new PostCommentLike
+        db.PostCommentLikes.Add(new PostCommentLike
         {
             Id = Guid.NewGuid(),
+            CommentId = comment.Id,
             ProfileId = currentUser.ProfileId!.Value,
         });
 

@@ -22,7 +22,6 @@ public static class ConfigureApp
 
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseStaticFiles();
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
 

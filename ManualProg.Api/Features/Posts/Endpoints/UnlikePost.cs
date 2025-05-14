@@ -27,7 +27,7 @@ public class UnlikePost : IEndpoint
         if (post == null)
             throw new EntityNotFoundException();
 
-        if (post.Likes.Count != 0)
+        if (post.Likes.Count == 0)
             throw new InvalidOperationException("post.alreadyUnliked");
 
         var like = post.Likes.First();

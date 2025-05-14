@@ -6,6 +6,7 @@ public record CommentResponse
     public required string Content { get; set; }
     public required int RepliesCount { get; set; }
     public required int LikeCount { get; set; }
+    public required bool HasLike { get; set; }
     public required ProfileData Profile { get; set; }
     public required DateTime Created { get; set; }
 
