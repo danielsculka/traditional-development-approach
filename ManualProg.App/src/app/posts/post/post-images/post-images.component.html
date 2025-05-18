@@ -1,11 +1,24 @@
-<div class="images" [ngClass]="{ 'solo' : !isIndependent }">
-  <ng-container *ngIf="isIndependent">
-    @for (imageId of post.imageIds; track imageId) {
-      <img [src]="postImages[imageId]">
-    }
-  </ng-container>
+<div class="images" [ngClass]="{ 'solo' : isMinimalistic }">
+  <div class="content">
+    <ng-container *ngIf="post.hasAccess">
+      <ng-container *ngIf="!isMinimalistic">
+        @for (imageId of post.imageIds; track imageId) {
+          <img [src]="postImages[imageId]">
+        }
+      </ng-container>
 
-  <ng-container *ngIf="!isIndependent">
-    <img (click)="onExpand.emit()" style="cursor: pointer" [src]="postImages[post.imageIds[0]]">
-  </ng-container>
+      <ng-container *ngIf="isMinimalistic">
+        <img (click)="onExpand.emit()" style="cursor: pointer" [src]="postImages[post.imageIds[0]]">
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!post.hasAccess">
+      <div class="purchase" (click)="onPurchase.emit()">
+        <button mat-flat-button>
+          <div class="title">Purchase post</div>
+          <div class="price">{{ post.price }} coins</div>
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </div>

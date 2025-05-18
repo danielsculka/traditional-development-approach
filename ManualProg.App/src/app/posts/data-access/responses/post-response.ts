@@ -5,6 +5,8 @@ export interface IPostResponse {
   commentCount: number;
   likeCount: number;
   hasLike: boolean;
+  hasAccess: boolean;
+  price: number;
   profile: IPostResponseProfileData;
   created: Date;
 }

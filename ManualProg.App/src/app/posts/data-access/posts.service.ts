@@ -8,6 +8,7 @@ import { IUpdatePostRequest } from './requests/update-post-request';
 import { ICommentResponse } from '../../comments/data-access/responses/comment-response';
 import { Utils } from '../../utils';
 import { IPagedRequest } from '../../shared/models/paged-request';
+import { IPostsRequest } from './requests/posts-request';
 
 @Injectable({
   providedIn: 'root'
@@ -45,13 +46,20 @@ export class PostsService {
     return this.http.get(url, { responseType: 'blob'});
   }
 
-  get(data: IPagedRequest): Observable<IPagedResponse<IPostResponse>> {
+  get(data: IPostsRequest): Observable<IPagedResponse<IPostResponse>> {
     let params: any = { };
 
     if (data.page) params.page = data.page;
     if (data.pageSize) params.pageSize = data.pageSize;
+    if (data.profileId) params.profileId = data.profileId;
 
     return this.http.get<IPagedResponse<IPostResponse>>(this.apiUrl, { params: params });
+  }
+
+  delete(id: string): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
+
+    return this.http.delete<any>(url);
   }
 
   like(id: string): Observable<any> {

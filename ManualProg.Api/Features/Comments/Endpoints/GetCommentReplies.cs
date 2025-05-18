@@ -1,5 +1,6 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Data.Extensions;
+using ManualProg.Api.Data.Users;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Comments.Requests;
 using ManualProg.Api.Features.Comments.Responses;
@@ -21,9 +22,15 @@ public class GetCommentReplies : IEndpoint
         CancellationToken cancellationToken
         )
     {
+        var hasFullAccess = currentUser.Role == UserRole.Administrator
+            || currentUser.Role == UserRole.Moderator;
+
         var result = await db.PostComments
-            .Where(c => c.ReplyToCommentId == id)
-            .OrderByDescending(c => c.Created)
+            .Where(c => c.ReplyToCommentId == id && (hasFullAccess
+                || c.Post.IsPublic
+                || c.Post.ProfileId == currentUser.ProfileId
+                || c.Post.Accesses.Any(a => a.ProfileId == currentUser.ProfileId)))
+            .OrderBy(c => c.Created)
             .Select(c => new CommentResponse
             {
                 Id = c.Id,

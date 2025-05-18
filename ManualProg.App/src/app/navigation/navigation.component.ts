@@ -15,14 +15,19 @@ export class NavigationComponent {
   visible = false;
 
   private readonly _authService = inject(AuthService);
-  private readonly _router = inject(Router);
 
   private readonly items: NavigationItem[] = [
     new NavigationItem('Home', 'home', '/posts'),
-    // new NavigationItem('Users', '', '/users', () => this.currentUser && ty),
-    new NavigationItem('Create', 'add_circle', '/posts/create'),
-    new NavigationItem('Profile', 'account_circle', undefined, () => `/profiles/${this.currentUser?.profileId}`, () => !!this.currentUser?.profileId),
-    new NavigationItem('Users', 'groups', '/users'),
+
+    new NavigationItem('Users', 'groups', '/users', undefined,
+      () => this.currentUser !== null && (this.currentUser.role === UserRole.Administrator || this.currentUser.role === UserRole.Moderator)),
+
+    new NavigationItem('Create', 'add_circle', '/posts/create', undefined,
+      () => this.currentUser !== null && this.currentUser.role === UserRole.Basic
+    ),
+
+    new NavigationItem('Profile', 'account_circle', undefined,
+      () => `/profiles/${this.currentUser?.profileId}`, () => !!this.currentUser?.profileId),
   ];
 
   get visibleItems(): NavigationItem[] {

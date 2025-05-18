@@ -1,9 +1,11 @@
 <div class="post">
-  <app-post-header *ngIf="isIndependent " [post]="post"></app-post-header>
+  <app-post-header *ngIf="!isMinimalistic" [post]="post"></app-post-header>
 
-  <app-post-images [post]="post" (onExpand)="openModal()"></app-post-images>
+  <app-post-images [post]="post" [isMinimalistic]="isMinimalistic" (onExpand)="openModal()"
+    (onPurchase)="onPurchase()">
+  </app-post-images>
 
-  <ng-container *ngIf="isIndependent">
+  <ng-container *ngIf="!isMinimalistic">
     <app-post-actions [post]="post" (onComment)="openModal()" (likeChanged)="onLikeChange()"></app-post-actions>
 
     <app-post-description [post]="post"></app-post-description>

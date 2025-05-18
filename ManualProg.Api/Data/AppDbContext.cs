@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Profile> Profiles { get; set; }
     public DbSet<CoinTransaction> CoinTransactions { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<PostAccess> PostAccess { get; set; }
     public DbSet<PostLike> PostLikes { get; set; }
     public DbSet<PostComment> PostComments { get; set; }
     public DbSet<PostCommentLike> PostCommentLikes { get; set; }
@@ -96,6 +97,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .WithMany(c => c.PostLikes)
                 .HasForeignKey(c => c.ProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(c => c.CoinTransaction)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         _ = modelBuilder.Entity<PostComment>(entity =>
@@ -114,6 +119,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .WithMany(c => c.Replies)
                 .HasForeignKey(c => c.ReplyToCommentId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(c => c.CoinTransaction)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         _ = modelBuilder.Entity<PostCommentLike>(entity =>
@@ -121,6 +130,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.HasOne(c => c.Profile)
                 .WithMany(c => c.CommentLikes)
                 .HasForeignKey(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(c => c.CoinTransaction)
+                .WithOne()
                 .OnDelete(DeleteBehavior.Restrict);
         });
 

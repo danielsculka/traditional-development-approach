@@ -1,16 +1,42 @@
 <div class="comment">
-  <div class="image">
-    <img [src]="profileImage" >
-  </div>
+  <div class="inner-container">
+    <app-profile-tag [profile]="comment.profile" [isMinimalistic]="true"></app-profile-tag>
 
-  <div class="details">
     <div class="content">
-      <span>{{ comment.profile.name }}</span>
-      {{ comment.content }}
+      <div>
+        <span class="title">{{comment.profile.name}}</span> {{ comment.content }}
+      </div>
+
+      <div class="details">
+        <span class="date">
+          {{ comment.created | date }}
+        </span>
+
+        <span>{{ comment.likeCount }} likes</span>
+
+        <span class="reply" *ngIf="canReply" (click)="onReply.emit(comment)">Reply</span>
+
+        <span class="delete" *ngIf="canDelete" (click)="delete()">Delete</span>
+      </div>
     </div>
 
-    <div class="date">
-      {{ comment.content | date }}
+    <div class="like" *ngIf="canLike" (click)="comment.hasLike ? unlike() : like()"
+        [ngClass]="{ 'liked' : comment.hasLike }">
+      <mat-icon>favorite</mat-icon>
+    </div>
+  </div>
+
+  <div class="replies" *ngIf="comment.repliesCount">
+    <div class="action" (click)="toggleReplies()">
+      <mat-icon>remove</mat-icon>
+
+      <span>{{repliesOpen ? 'Hide' : 'View' }} replies ({{comment.repliesCount}})</span>
+    </div>
+
+    <div *ngIf="repliesOpen">
+      @for (reply of replies; track reply.id) {
+        <app-comment [comment]="reply" (onReply)="onReply.emit(reply)"></app-comment>
+      }
     </div>
   </div>
 </div>

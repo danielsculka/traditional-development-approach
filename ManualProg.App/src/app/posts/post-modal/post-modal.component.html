@@ -1,0 +1,33 @@
+<div class="post" *ngIf="post">
+  <div class="images">
+    <app-post-images [post]="post"></app-post-images>
+  </div>
+
+  <div class="details">
+    <app-post-header [post]="post" [showDelete]="true" (onDelete)="onDelete()"></app-post-header>
+
+    <app-post-description [post]="post"></app-post-description>
+
+    <div class="comments">
+      @for (comment of comments; track comment.id) {
+        <app-comment [comment]="comment" (onReply)="reply($event)"></app-comment>
+      }
+
+      <div class="load-comments" *ngIf="commentsHasNextPage" (click)="onCommentLoad()">
+        <button mat-icon-button><mat-icon>add_circle</mat-icon></button>
+      </div>
+    </div>
+
+    <app-post-actions [post]="post" (likeChanged)="onLikeChange()"></app-post-actions>
+
+    <form *ngIf="canComment" class="new-comment" [formGroup]="newComment" (ngSubmit)="onComment()">
+      <mat-form-field appearance="fill">
+        <textarea matInput cdkTextareaAutosize formControlName="content"
+          placeholder="Add a comment...">
+        </textarea>
+      </mat-form-field>
+
+      <button mat-button type="submit">Post</button>
+    </form>
+  </div>
+</div>

@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { IProfileResponse } from './responses/profile-response';
 import { IPagedResponse } from '../../shared/models/paged-response';
 import { IPagedRequest } from '../../shared/models/paged-request';
-import { IProfilePostResponse } from './responses/profile-post-response';
 import { IUpdateProfileRequest } from './requests/update-profile-request';
 
 @Injectable({
@@ -36,17 +35,6 @@ export class ProfilesService {
     const url = `${this.apiUrl}/${id}/image`;
 
     return this.http.get(url, { responseType: 'blob'});
-  }
-
-  getPosts(id: string, data: IPagedRequest): Observable<IPagedResponse<IProfilePostResponse>> {
-    let params: any = { };
-
-    if (data.page) params.page = data.page;
-    if (data.pageSize) params.pageSize = data.pageSize;
-
-    const url = `${this.apiUrl}/${id}/posts`;
-
-    return this.http.get<IPagedResponse<IProfilePostResponse>>(url, { params: params });
   }
 
   update(id: string, data: IUpdateProfileRequest): Observable<any> {

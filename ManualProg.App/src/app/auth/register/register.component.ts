@@ -42,7 +42,7 @@ export class RegisterComponent {
     };
 
     this._service.register(request).subscribe(response => {
-      this._router.navigateByUrl('/');
+      this._router.navigate(['/']);
     });
   }
 }

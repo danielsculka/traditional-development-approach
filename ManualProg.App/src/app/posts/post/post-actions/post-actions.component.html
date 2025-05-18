@@ -1,5 +1,5 @@
 <div class="actions">
-  <div class="action" (click)="hasLike ? unlike() : like()" [ngClass]="{ 'liked' : hasLike}">
+  <div class="action" (click)="post.hasLike ? unlike() : like()" [ngClass]="{ 'liked' : post.hasLike }">
     <mat-icon>favorite</mat-icon> {{ post.likeCount}}
   </div>
 

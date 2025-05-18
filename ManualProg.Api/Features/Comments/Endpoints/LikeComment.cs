@@ -1,9 +1,10 @@
 ﻿using ManualProg.Api.Data;
+using ManualProg.Api.Data.CoinTransactions;
 using ManualProg.Api.Data.Posts;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace ManualProg.Api.Features.Comments.Endpoints;
 
@@ -13,7 +14,7 @@ public class LikeComment : IEndpoint
         .MapPost("/{id}/like", HandleAsync)
         .WithSummary("Like a comment");
 
-    private static async Task HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
         [FromServices] ICurrentUser currentUser,
@@ -21,23 +22,47 @@ public class LikeComment : IEndpoint
         )
     {
         var comment = await db.PostComments
-            .Where(p => p.Id == id)
+            .Where(c => c.Id == id && (
+                c.Post.IsPublic
+                || c.Post.ProfileId == currentUser.ProfileId
+                || c.Post.Accesses.Any(a => a.ProfileId == currentUser.ProfileId)))
             .Include(p => p.Likes.Where(a => a.ProfileId == currentUser.ProfileId))
+            .Include(post => post.Profile)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (comment == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         if (comment.Likes.Count != 0)
-            throw new InvalidOperationException("comment.alreadyLiked");
+            return Results.BadRequest("comment.alreadyLiked");
 
-        db.PostCommentLikes.Add(new PostCommentLike
+        var like = new PostCommentLike
         {
             Id = Guid.NewGuid(),
             CommentId = comment.Id,
-            ProfileId = currentUser.ProfileId!.Value,
-        });
+            ProfileId = currentUser.ProfileId!.Value
+        };
+
+        if (currentUser.ProfileId != comment.ProfileId)
+        {
+            var currentUserProfile = await db.Profiles
+                .FindAsync([currentUser.ProfileId], cancellationToken);
+
+            like.CoinTransaction = new CoinTransaction
+            {
+                Id = Guid.NewGuid(),
+                SenderProfile = currentUserProfile!,
+                ReceiverProfile = comment.Profile,
+                Amount = 1
+            };
+
+            like.CoinTransaction.ReceiverProfile.Coins += like.CoinTransaction.Amount;
+        }
+
+        db.PostCommentLikes.Add(like);
 
         _ = await db.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok();
     }
 }

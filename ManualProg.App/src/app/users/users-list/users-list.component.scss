@@ -1,0 +1,12 @@
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mat-column-actions {
+  text-align: end;
+
+  .delete {
+    color: rgb(235, 11, 11);
+  }
+}

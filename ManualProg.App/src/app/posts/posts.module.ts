@@ -13,8 +13,9 @@ import { PostComponent } from './post/post.component';
 import { PostActionsComponent } from './post/post-actions/post-actions.component';
 import { PostHeaderComponent } from './post/post-header/post-header.component';
 import { PostDescriptionComponent } from './post/post-description/post-description.component';
-import { PostModalComponent } from './post/post-modal/post-modal.component';
+import { PostModalComponent } from './post-modal/post-modal.component';
 import { PostImagesComponent } from './post/post-images/post-images.component';
+import { CommentsModule } from '../comments/comments.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { PostImagesComponent } from './post/post-images/post-images.component';
   imports: [
     CommonModule,
     SharedModule,
+    CommentsModule,
     PostsRoutingModule,
     MatButtonModule,
     MatIconModule,

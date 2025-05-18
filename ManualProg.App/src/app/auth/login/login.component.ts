@@ -24,7 +24,7 @@ export class LoginComponent {
     const request: ILoginRequest = this.form.getRawValue();
 
     this._service.login(request).subscribe(response => {
-      this._router.navigateByUrl('/');
+      this._router.navigate(['/']);
     });
   }
 }

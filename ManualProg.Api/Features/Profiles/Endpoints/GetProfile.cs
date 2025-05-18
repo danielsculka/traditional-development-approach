@@ -1,5 +1,4 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Profiles.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,7 @@ public class GetProfile : IEndpoint
         .MapGet("/{id}", HandleAsync)
         .WithSummary("Get a profile");
 
-    private static async Task<ProfileResponse> HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id, 
         [FromServices] AppDbContext db, 
         [FromServices] ICurrentUser currentUser, 
@@ -33,8 +32,8 @@ public class GetProfile : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (profile == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
-        return profile;
+        return Results.Ok(profile);
     }
 }

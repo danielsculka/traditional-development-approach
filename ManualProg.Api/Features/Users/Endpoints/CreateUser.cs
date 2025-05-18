@@ -15,7 +15,7 @@ public class CreateUser : IEndpoint
         .WithSummary("Creates a new user");
 
     private static async Task<Guid> HandleAsync(
-        [FromForm] CreateUserRequest request, 
+        [FromBody] CreateUserRequest request, 
         [FromServices] AppDbContext db, 
         [FromServices] ICurrentUser currentUser, 
         CancellationToken cancellationToken

@@ -27,7 +27,15 @@ export class UsersService {
     return this.http.post<string>(this.apiUrl, data);
   }
 
-  update(data: IUpdateUserRequest): Observable<any> {
-    return this.http.put<any>(this.apiUrl, data);
+  update(id: string, data: IUpdateUserRequest): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
+
+    return this.http.put<any>(url, data);
+  }
+
+  delete(id: string): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
+
+    return this.http.delete<any>(url);
   }
 }

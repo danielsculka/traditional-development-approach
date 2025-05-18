@@ -1,0 +1,64 @@
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  .inner-container {
+    display: flex;
+    width: 100%;
+
+    .content {
+      width: 100%;
+
+      .title {
+        font-weight: 500;
+        margin-right: 5px;
+      }
+
+      .details {
+        margin-top: 5px;
+        color: rgb(134, 134, 134);
+        font-size: 0.9em;
+
+        span {
+          margin-right: 10px;
+        }
+
+        .reply, .delete {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .like {
+      margin-top: 5px;
+      display: flex;
+      color: rgb(134, 134, 134);
+
+      .mat-icon {
+        font-size: 1.3em;
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+      }
+
+      &.liked {
+        color: rgb(172, 31, 31);
+      }
+    }
+  }
+
+  .replies {
+    margin-left: 25px;
+    margin-top: 10px;
+
+    .action {
+      display: flex;
+      align-items: center;
+      color: rgb(134, 134, 134);
+      font-size: 0.9em;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+  }
+}

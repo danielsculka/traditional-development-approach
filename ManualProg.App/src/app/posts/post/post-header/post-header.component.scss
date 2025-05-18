@@ -2,23 +2,14 @@
   display: flex;
   align-items: center;
   margin-bottom: 15px;
-  cursor: pointer;
-
-  img {
-    width: 32px;
-    height: 32px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-right: 15px;
-  }
 
   .details {
-    .name {
-      font-weight: 500;
-    }
+    color: rgb(134, 134, 134);
+    margin-left: 5px;
+    width: 100%;
+  }
 
-    .date {
-      color: rgb(134, 134, 134);
-    }
+  .delete {
+    color: rgb(235, 11, 11);
   }
 }

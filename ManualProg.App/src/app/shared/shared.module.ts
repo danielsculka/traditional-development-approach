@@ -5,10 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FileUploadInputCompontent } from './components/file-upload-input/file-upload-input.component';
+import { ProfileTagComponent } from './components/profile-tag/profile-tag.component';
 
 @NgModule({
   declarations: [
-    FileUploadInputCompontent
+    FileUploadInputCompontent,
+    ProfileTagComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { FileUploadInputCompontent } from './components/file-upload-input/file-u
     ReactiveFormsModule
   ],
   exports: [
-    FileUploadInputCompontent
+    FileUploadInputCompontent,
+    ProfileTagComponent
   ]
 })
 export class SharedModule { }

@@ -1,9 +1,9 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Data.Users;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Users.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManualProg.Api.Features.Users.Endpoints;
 
@@ -13,7 +13,7 @@ public class UpdateUser : IEndpoint
         .MapPut("/{id}", HandleAsync)
         .WithSummary("Update a post");
 
-    private static async Task HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromBody] UpdateUserRequest request,
         [FromServices] AppDbContext db,
@@ -25,13 +25,16 @@ public class UpdateUser : IEndpoint
             throw new InvalidOperationException("user.cannotCreateUserWithRoleBasic");
 
         var user = await db.Users
-            .FindAsync([id], cancellationToken);
+            .Where(p => p.Id == id && p.Username != "admin")
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (user == null)
-            throw new EntityNotFoundException();
+            return Results.Unauthorized();
 
         user.Role = request.Role;
 
         _ = await db.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok();
     }
 }

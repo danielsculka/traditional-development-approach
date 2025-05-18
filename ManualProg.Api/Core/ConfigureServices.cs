@@ -2,6 +2,7 @@
 using ManualProg.Api.Features.Auth;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -12,7 +13,12 @@ public static class ConfigureServices
 {
     public static void AddServices(this WebApplicationBuilder builder)
     {
-        builder.AddSqlServerDbContext<AppDbContext>("sqldb");
+        builder.Services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseLazyLoadingProxies()
+                   .UseSqlServer(builder.Configuration.GetConnectionString("sqldb"));
+        });
+
         builder.AddServiceDefaults();
         builder.AddSwagger();
 

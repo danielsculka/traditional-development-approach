@@ -46,6 +46,36 @@
     }
   }
 
+  .transactions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .header  {
+      font-weight: 500;
+
+    }
+
+    .transaction, .header  {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 15px;
+
+      .sender, .receiver {
+        width: 30%;
+      }
+
+      .ammount {
+        width: 20%;
+      }
+
+      .created {
+        width: 20%;
+      }
+    }
+  }
+
   ::ng-deep .mat-mdc-tab-header {
     margin-bottom: 10px;
   }

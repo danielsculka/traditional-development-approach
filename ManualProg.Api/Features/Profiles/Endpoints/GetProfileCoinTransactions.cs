@@ -1,5 +1,6 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Data.Extensions;
+using ManualProg.Api.Data.Users;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Posts.Requests;
 using ManualProg.Api.Features.Profiles.Responses;
@@ -13,7 +14,7 @@ public class GetProfileCoinTransactions : IEndpoint
         .MapGet("/{id}/transactions", HandleAsync)
         .WithSummary("Get a profile coin transactions");
 
-    private static async Task<PagedList<ProfileCoinTransactionResponse>> HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [AsParameters] GetPostsRequest request,
         [FromServices] AppDbContext db,
@@ -21,6 +22,11 @@ public class GetProfileCoinTransactions : IEndpoint
         CancellationToken cancellationToken
         )
     {
+        var hasFullAccess = currentUser.Role == UserRole.Administrator;
+
+        if (!hasFullAccess && currentUser.ProfileId != id)
+            return Results.Unauthorized();
+
         var result = await db.CoinTransactions
             .Where(c => c.SenderProfileId == id || c.ReceiverProfileId == id)
             .OrderByDescending(c => c.Created)
@@ -44,6 +50,6 @@ public class GetProfileCoinTransactions : IEndpoint
             })
             .ToPagedArrayAsync(request, cancellationToken);
 
-        return result;
+        return Results.Ok(result);
     }
 }

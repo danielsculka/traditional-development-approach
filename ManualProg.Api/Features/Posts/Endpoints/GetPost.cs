@@ -1,5 +1,5 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
+using ManualProg.Api.Data.Users;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Posts.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +13,16 @@ public class GetPost : IEndpoint
         .MapGet("/{id}", HandleAsync)
         .WithSummary("Get a post");
 
-    private static async Task<PostResponse> HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id, 
         [FromServices] AppDbContext db, 
         [FromServices] ICurrentUser currentUser, 
         CancellationToken cancellationToken
         )
     {
+        var hasFullAccess = currentUser.Role == UserRole.Administrator
+            || currentUser.Role == UserRole.Moderator;
+
         var post = await db.Posts
             .Where(post => post.Id == id)
             .Select(post => new PostResponse
@@ -32,6 +35,11 @@ public class GetPost : IEndpoint
                 CommentCount = post.Comments.Count,
                 LikeCount = post.Likes.Count,
                 HasLike = post.Likes.Any(l => l.ProfileId == currentUser.ProfileId),
+                HasAccess = hasFullAccess
+                    || post.IsPublic
+                    || post.ProfileId == currentUser.ProfileId
+                    || post.Accesses.Any(a => a.ProfileId == currentUser.ProfileId),
+                Price = post.Price,
                 Profile = new PostResponse.ProfileData
                 {
                     Id = post.Profile.Id,
@@ -43,8 +51,8 @@ public class GetPost : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (post == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
-        return post;
+        return Results.Ok(post);
     }
 }

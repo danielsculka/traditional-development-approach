@@ -1,9 +1,8 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { SafeUrl } from '@angular/platform-browser';
-import { IPostResponse, IPostResponseProfileData } from '../../data-access/responses/post-response';
-import { IPost } from '../post.component';
-import { map, Observable, of, tap } from 'rxjs';
-import { ProfilesService } from '../../../profiles/data-access/profiles.service';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { IPostResponse } from '../../data-access/responses/post-response';
+import { AuthService } from '../../../auth/data-access/auth.service';
+import { UserRole } from '../../../shared/enums/user-role';
+import { PostsService } from '../../data-access/posts.service';
 
 @Component({
   selector: 'app-post-header',
@@ -11,35 +10,27 @@ import { ProfilesService } from '../../../profiles/data-access/profiles.service'
   templateUrl: './post-header.component.html',
   styleUrl: './post-header.component.scss'
 })
-export class PostHeaderComponent implements OnInit {
-  private readonly _profilesService = inject(ProfilesService);
+export class PostHeaderComponent {
+  private readonly _authService = inject(AuthService);
+  private readonly _postsService = inject(PostsService);
 
-  profileImage: SafeUrl | null = null;
-  profile!: IPostResponseProfileData;
+  @Input() post!: IPostResponse;
+  @Input() showDelete: boolean = false;
+  @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
 
-  @Input() post!: IPost;
+  get canDelete(): boolean {
+    if (!this.showDelete)
+      return false;
 
-  ngOnInit(): void {
-    const hasProfile = this.post.hasOwnProperty('profile');
+    const user = this._authService.currentUserSignal();
 
-    if (hasProfile) {
-      const p = this.post as IPostResponse;
-
-      this.profile = p.profile;
-
-      this.loadProfileImage()
-        .subscribe(() => {})
-    }
+    return user?.role === UserRole.Administrator
+      || user?.role === UserRole.Moderator
+      || this._authService.currentUserSignal()?.profileId === this.post.profile.id
   }
 
-  private loadProfileImage(): Observable<any> {
-    if (!this.profile!.hasImage)
-      return of();
-
-    return this._profilesService.getImage(this.profile!.id)
-      .pipe(
-        tap(response => this.profileImage = URL.createObjectURL(response)),
-        map(response => undefined)
-      )
+  delete(): void {
+    this._postsService.delete(this.post.id)
+      .subscribe(() => this.onDelete.emit());
   }
 }

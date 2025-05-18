@@ -13,7 +13,7 @@ import { PostsModule } from '../posts/posts.module';
 
 @NgModule({
   declarations: [
-    ProfileComponent
+    ProfileComponent,
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
+using ManualProg.Api.Data.Users;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +12,18 @@ public class DeleteProfile : IEndpoint
         .MapDelete("/{id}", HandleAsync)
         .WithSummary("Delete a profile");
 
-    private static async Task HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
         [FromServices] ICurrentUser currentUser,
         CancellationToken cancellationToken
         )
     {
+        var hasFullAccess = currentUser.Role == UserRole.Administrator;
+
+        if (!hasFullAccess && currentUser.ProfileId != id)
+            return Results.Unauthorized();
+
         var profile = await db.Profiles
             .Include(p => p.Image)
             .Include(p => p.Posts)
@@ -29,7 +34,7 @@ public class DeleteProfile : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (profile == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         db.PostCommentLikes.RemoveRange(profile.CommentLikes);
 
@@ -45,5 +50,7 @@ public class DeleteProfile : IEndpoint
         db.Profiles.Remove(profile);
 
         _ = await db.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok();
     }
 }

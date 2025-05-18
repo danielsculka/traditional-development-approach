@@ -9,7 +9,9 @@ import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   declarations: [
-  
+    CommentComponent
+  ],
+  exports: [
     CommentComponent
   ],
   imports: [

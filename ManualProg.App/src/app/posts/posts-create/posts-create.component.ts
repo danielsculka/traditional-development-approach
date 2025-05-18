@@ -36,7 +36,7 @@ export class PostsCreateComponent {
     };
 
     this._service.create(request).subscribe(response => {
-      this._router.navigateByUrl('/profile');
+      this._router.navigate(['/profile']);
     });
   }
 }

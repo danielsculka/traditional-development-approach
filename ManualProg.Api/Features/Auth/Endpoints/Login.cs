@@ -1,5 +1,4 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Requests;
 using ManualProg.Api.Features.Auth.Responses;
 using ManualProg.Api.Features.Auth.Services;
@@ -14,7 +13,7 @@ public class Login : IEndpoint
         .MapPost("/login", HandleAsync)
         .WithSummary("Login");
 
-    private static async Task<TokenResponse> HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromBody] LoginRequest request,
         [FromServices] AppDbContext db,
         [FromServices] IdentityService identityManager,
@@ -26,10 +25,10 @@ public class Login : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (user == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         if (!identityManager.VerifyPassword(user, request.Password))
-            throw new AccessDeniedException();
+            return Results.Unauthorized();
 
         var refreshToken = identityManager.GenerateRefreshToken();
 
@@ -38,7 +37,7 @@ public class Login : IEndpoint
 
         await db.SaveChangesAsync(cancellationToken);
 
-        return new TokenResponse
+        return Results.Ok(new TokenResponse
         {
             AccessToken = identityManager.GenerateToken(user),
             RefreshToken = user.RefreshToken,
@@ -46,6 +45,6 @@ public class Login : IEndpoint
             Username = user.Username,
             UserRole = user.Role,
             ProfileId = user.ProfileId
-        };
+        });
     }
 }

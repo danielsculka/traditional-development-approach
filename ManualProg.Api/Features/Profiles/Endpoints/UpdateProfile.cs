@@ -1,6 +1,5 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Data.Images;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using ManualProg.Api.Features.Profiles.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +15,7 @@ public class UpdateProfile : IEndpoint
 
     private static readonly string[] AcceptedImageTypes = [MediaTypeNames.Image.Png, MediaTypeNames.Image.Jpeg];
 
-    private static async Task HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromBody] UpdateProfileRequest request,
         [FromServices] AppDbContext db,
@@ -24,6 +23,9 @@ public class UpdateProfile : IEndpoint
         CancellationToken cancellationToken
         )
     {
+        if (currentUser.ProfileId != id)
+            return Results.Unauthorized();
+
         ArgumentNullException.ThrowIfNullOrWhiteSpace(request.Name);
         ArgumentOutOfRangeException.ThrowIfLessThan(request.Name.Length, 3);
 
@@ -31,7 +33,7 @@ public class UpdateProfile : IEndpoint
             .FindAsync([id], cancellationToken);
 
         if (profile == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         profile.Name = request.Name;
         profile.Description = request.Description;
@@ -60,5 +62,7 @@ public class UpdateProfile : IEndpoint
         }
 
         _ = await db.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok();
     }
 }

@@ -33,6 +33,7 @@ public class GetUsers : IEndpoint
                     {
                         Id = u.Profile.Id,
                         Name = u.Profile.Name,
+                        HasImage = u.Profile.Image != null
                     },
                 Created = u.Created
             })

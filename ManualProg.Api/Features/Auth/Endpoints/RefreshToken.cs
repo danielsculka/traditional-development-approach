@@ -1,5 +1,4 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Requests;
 using ManualProg.Api.Features.Auth.Responses;
 using ManualProg.Api.Features.Auth.Services;
@@ -14,7 +13,7 @@ public class RefreshToken : IEndpoint
         .MapPost("/refresh", Handle)
         .WithSummary("Refresh token");
 
-    private static async Task<TokenResponse> Handle(
+    private static async Task<IResult> Handle(
         [FromBody] RefreshTokenRequest request,
         [FromServices] AppDbContext db,
         [FromServices] IdentityService identityManager,
@@ -26,11 +25,11 @@ public class RefreshToken : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (user == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         if (user.RefreshToken != request.RefreshToken
             || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            throw new AccessDeniedException();
+            return Results.Unauthorized();
 
         var refreshToken = identityManager.GenerateRefreshToken();
 
@@ -39,7 +38,7 @@ public class RefreshToken : IEndpoint
 
         await db.SaveChangesAsync(cancellationToken);
 
-        return new TokenResponse
+        return Results.Ok(new TokenResponse
         {
             AccessToken = identityManager.GenerateToken(user),
             RefreshToken = user.RefreshToken,
@@ -47,6 +46,6 @@ public class RefreshToken : IEndpoint
             Username = user.Username,
             UserRole = user.Role,
             ProfileId = user.ProfileId
-        };
+        });
     }
 }

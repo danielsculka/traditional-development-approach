@@ -8,6 +8,8 @@ public record PostResponse
     public required int CommentCount { get; set; }
     public required int LikeCount { get; set; }
     public required bool HasLike { get; set; }
+    public required bool HasAccess { get; set; }
+    public required int Price { get; set; }
     public required ProfileData Profile { get; set; }
     public required DateTime Created { get; set; }
 

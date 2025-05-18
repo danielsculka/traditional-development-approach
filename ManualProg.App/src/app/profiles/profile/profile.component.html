@@ -1,4 +1,4 @@
-<div #scrollBox class="main-container" (scroll)="onScroll(scrollBox)">
+<div #scrollBox class="main-container" (scroll)="onScroll()">
   <div class="container">
     <div class="profile">
       <div class="image">
@@ -22,19 +22,48 @@
       </div>
     </div>
 
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" animationDuration="0">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" animationDuration="0" (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Posts">
         <div class="posts">
           @for (post of posts; track post.id) {
             <div class="post">
-              <app-post [post]="post"></app-post>
+              <app-post [post]="post" (onDelete)="init()"></app-post>
             </div>
           }
         </div>
       </mat-tab>
 
-      <mat-tab label="Transactions">
+      <mat-tab label="Transactions" *ngIf="canAccessTransactions">
+        <div class="transactions">
+          <table mat-table [dataSource]="transactions">
+            <ng-container matColumnDef="sender">
+              <th mat-header-cell *matHeaderCellDef>Sender</th>
+              <td mat-cell *matCellDef="let n">
+                <app-profile-tag [profile]="n.senderProfile"></app-profile-tag>
+              </td>
+            </ng-container>
 
+            <ng-container matColumnDef="receiver">
+              <th mat-header-cell *matHeaderCellDef>Receiver</th>
+              <td mat-cell *matCellDef="let n">
+                <app-profile-tag [profile]="n.receiverProfile"></app-profile-tag>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ammount">
+              <th mat-header-cell *matHeaderCellDef>Ammount</th>
+              <td mat-cell *matCellDef="let n">{{ n.ammount}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="created">
+              <th mat-header-cell *matHeaderCellDef>Created</th>
+              <td mat-cell *matCellDef="let n">{{ n.created | date }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="transactionsDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: transactionsDisplayedColumns;"></tr>
+          </table>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </div>

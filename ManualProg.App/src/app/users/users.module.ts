@@ -8,15 +8,23 @@ import { SharedModule } from '../shared/shared.module';
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersListComponent } from './users-list/users-list.component';
 import { MatTableModule } from '@angular/material/table';
+import { UserEditModalComponent } from './user-edit-modal/user-edit-modal.component';
+import { MatDialogActions, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
-    UsersListComponent
+    UsersListComponent,
+    UserEditModalComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     UsersRoutingModule,
+    MatDialogActions,
+    MatDialogContent,
+    MatSelectModule,
+    MatDialogTitle,
     MatButtonModule,
     MatIconModule,
     FormsModule,

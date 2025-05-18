@@ -1,5 +1,5 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
+using ManualProg.Api.Data.Users;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +20,17 @@ public class GetPostImage : IEndpoint
         CancellationToken cancellationToken
         )
     {
+        var hasFullAccess = currentUser.Role == UserRole.Administrator
+            || currentUser.Role == UserRole.Moderator;
+
         var post = await db.Posts
             .Where(post => post.Images.Any(i => i.Id == id))
             .Select(post => new
             {
+                HasAccess = hasFullAccess
+                    || post.IsPublic
+                    || post.ProfileId == currentUser.ProfileId
+                    || post.Accesses.Any(a => a.ProfileId == currentUser.ProfileId),
                 ImageContent = post.Images
                     .First(i => i.Id == id)
                     .Image.Content
@@ -31,7 +38,10 @@ public class GetPostImage : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (post == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
+
+        if (!post.HasAccess)
+            return Results.Unauthorized();
 
         return Results.File(post.ImageContent, MediaTypeNames.Image.Png);
     }

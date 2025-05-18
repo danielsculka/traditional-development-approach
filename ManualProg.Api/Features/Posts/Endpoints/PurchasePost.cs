@@ -1,7 +1,6 @@
 ﻿using ManualProg.Api.Data;
 using ManualProg.Api.Data.CoinTransactions;
 using ManualProg.Api.Data.Posts;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ public class PurchasePost : IEndpoint
         .MapPost("/{id}/purchase", HandleAsync)
         .WithSummary("Purchase a post");
 
-    private static async Task HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
         [FromServices] ICurrentUser currentUser,
@@ -28,21 +27,21 @@ public class PurchasePost : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (post == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         if (post.IsPublic || post.ProfileId == currentUser.ProfileId || post.Accesses.Count != 0)
-            throw new InvalidOperationException("post.alreadyHasAccess");
+            return Results.BadRequest("post.alreadyHasAccess");
 
         var buyerProfile = await db.Profiles
             .FindAsync([currentUser.ProfileId], cancellationToken);
 
         if (buyerProfile!.Coins < post.Price)
-            throw new InvalidOperationException("profile.insufficientCoins");
+            return Results.BadRequest("profile.insufficientCoins");
 
         var transaction = new CoinTransaction {
             Id = Guid.NewGuid(),
             SenderProfile = buyerProfile,
-            ReceiverProfile = buyerProfile,
+            ReceiverProfile = post.Profile,
             Amount = post.Price
         };
 
@@ -51,12 +50,15 @@ public class PurchasePost : IEndpoint
         transaction.SenderProfile.Coins -= transaction.Amount;
         transaction.ReceiverProfile.Coins += transaction.Amount;
 
-        post.Accesses.Add(new PostAccess
+        db.PostAccess.Add(new PostAccess
         {
             Id = Guid.NewGuid(),
+            Post = post,
             ProfileId = currentUser.ProfileId!.Value
         });
 
         _ = await db.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok();
     }
 }

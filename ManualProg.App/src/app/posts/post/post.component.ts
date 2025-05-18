@@ -1,12 +1,10 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { PostsService } from '../data-access/posts.service';
 import { IPostResponse } from '../data-access/responses/post-response';
-import { IProfilePostResponse } from '../../profiles/data-access/responses/profile-post-response';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { PostModalComponent } from './post-modal/post-modal.component';
-
-export type IPost = IPostResponse | IProfilePostResponse;
+import { PostModalComponent } from '../post-modal/post-modal.component';
+import { AuthService } from '../../auth/data-access/auth.service';
 
 @Component({
   selector: 'app-post',
@@ -14,17 +12,16 @@ export type IPost = IPostResponse | IProfilePostResponse;
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
-export class PostComponent implements OnInit {
+export class PostComponent {
+  private readonly _authService = inject(AuthService);
   private readonly _postsService = inject(PostsService);
   private readonly _dialog = inject(MatDialog);
 
-  @Input() post!: IPost;
+  @Input() post!: IPostResponse;
 
-  isIndependent: boolean = true;
+  @Input() isMinimalistic: boolean = true;
 
-  ngOnInit(): void {
-    this.isIndependent = this.post.hasOwnProperty('profile');
-  }
+  @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
 
   onLikeChange(): void {
     this.refreshPost()
@@ -32,16 +29,31 @@ export class PostComponent implements OnInit {
   }
 
   openModal(): void {
-    console.log(this.post);
+    if (!this.post.hasAccess)
+      return;
 
     const dialogRef = this._dialog.open(PostModalComponent, {
       data: this.post
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.refreshPost()
-        .subscribe(() => {});
+    dialogRef.afterClosed().subscribe(deleted => {
+      if (deleted) {
+        this.onDelete.emit();
+      } else {
+        this.refreshPost()
+          .subscribe(() => {});
+      }
     })
+  }
+
+  onPurchase(): void {
+    if (this.post.hasAccess || !this._authService.currentUserSignal())
+      return;
+
+    this._postsService.purchase(this.post.id)
+      .pipe(
+        switchMap(() => this.refreshPost())
+      ).subscribe(() => {});
   }
 
   private refreshPost(): Observable<any> {

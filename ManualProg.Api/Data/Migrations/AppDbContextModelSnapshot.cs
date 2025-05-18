@@ -18,6 +18,9 @@ namespace ManualProg.Api.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -49,7 +52,7 @@ namespace ManualProg.Api.Migrations
 
                     b.HasIndex("SenderProfileId");
 
-                    b.ToTable("CoinTransactions", (string)null);
+                    b.ToTable("CoinTransactions");
                 });
 
             modelBuilder.Entity("ManualProg.Api.Data.Images.Image", b =>
@@ -138,6 +141,9 @@ namespace ManualProg.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CoinTransactionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -159,6 +165,10 @@ namespace ManualProg.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CoinTransactionId")
+                        .IsUnique()
+                        .HasFilter("[CoinTransactionId] IS NOT NULL");
+
                     b.HasIndex("PostId");
 
                     b.HasIndex("ProfileId");
@@ -174,6 +184,9 @@ namespace ManualProg.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CoinTransactionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CommentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -187,6 +200,10 @@ namespace ManualProg.Api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoinTransactionId")
+                        .IsUnique()
+                        .HasFilter("[CoinTransactionId] IS NOT NULL");
 
                     b.HasIndex("CommentId");
 
@@ -229,6 +246,9 @@ namespace ManualProg.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CoinTransactionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -242,6 +262,10 @@ namespace ManualProg.Api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoinTransactionId")
+                        .IsUnique()
+                        .HasFilter("[CoinTransactionId] IS NOT NULL");
 
                     b.HasIndex("PostId");
 
@@ -381,6 +405,11 @@ namespace ManualProg.Api.Migrations
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.PostComment", b =>
                 {
+                    b.HasOne("ManualProg.Api.Data.CoinTransactions.CoinTransaction", "CoinTransaction")
+                        .WithOne()
+                        .HasForeignKey("ManualProg.Api.Data.Posts.PostComment", "CoinTransactionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("ManualProg.Api.Data.Posts.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
@@ -398,6 +427,8 @@ namespace ManualProg.Api.Migrations
                         .HasForeignKey("ReplyToCommentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.Navigation("CoinTransaction");
+
                     b.Navigation("Post");
 
                     b.Navigation("Profile");
@@ -407,6 +438,11 @@ namespace ManualProg.Api.Migrations
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.PostCommentLike", b =>
                 {
+                    b.HasOne("ManualProg.Api.Data.CoinTransactions.CoinTransaction", "CoinTransaction")
+                        .WithOne()
+                        .HasForeignKey("ManualProg.Api.Data.Posts.PostCommentLike", "CoinTransactionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("ManualProg.Api.Data.Posts.PostComment", "Comment")
                         .WithMany("Likes")
                         .HasForeignKey("CommentId")
@@ -418,6 +454,8 @@ namespace ManualProg.Api.Migrations
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("CoinTransaction");
 
                     b.Navigation("Comment");
 
@@ -445,6 +483,11 @@ namespace ManualProg.Api.Migrations
 
             modelBuilder.Entity("ManualProg.Api.Data.Posts.PostLike", b =>
                 {
+                    b.HasOne("ManualProg.Api.Data.CoinTransactions.CoinTransaction", "CoinTransaction")
+                        .WithOne()
+                        .HasForeignKey("ManualProg.Api.Data.Posts.PostLike", "CoinTransactionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("ManualProg.Api.Data.Posts.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
@@ -456,6 +499,8 @@ namespace ManualProg.Api.Migrations
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("CoinTransaction");
 
                     b.Navigation("Post");
 

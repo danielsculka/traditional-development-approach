@@ -1,5 +1,4 @@
-﻿using ManualProg.Api.Exceptions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Net;
@@ -47,9 +46,9 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
     {
         return exception switch
         {
-            AccessDeniedException or ReadOnlyException or UnauthorizedAccessException => HttpStatusCode.Forbidden,
+            ReadOnlyException or UnauthorizedAccessException => HttpStatusCode.Forbidden,
             InvalidOperationException or NotSupportedException or ValidationException => HttpStatusCode.BadRequest,
-            EntityNotFoundException or FileNotFoundException => HttpStatusCode.NotFound,
+            FileNotFoundException => HttpStatusCode.NotFound,
             _ => HttpStatusCode.InternalServerError
         };
     }

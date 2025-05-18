@@ -1,5 +1,4 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,7 @@ public class GetProfileImage : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (imageContent == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         return Results.File(imageContent, MediaTypeNames.Image.Png);
     }

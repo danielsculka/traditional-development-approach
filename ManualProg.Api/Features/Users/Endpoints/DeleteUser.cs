@@ -1,5 +1,4 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,7 @@ public class DeleteUser : IEndpoint
         .MapDelete("/{id}", HandleAsync)
         .WithSummary("Delete a user");
 
-    private static async Task HandleAsync(
+    private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,
         [FromServices] AppDbContext db,
         [FromServices] ICurrentUser currentUser,
@@ -20,14 +19,16 @@ public class DeleteUser : IEndpoint
         )
     {
         var user = await db.Users
-            .Where(p => p.Id == id)
+            .Where(p => p.Id == id && p.Username != "admin")
             .FirstOrDefaultAsync(cancellationToken);
 
         if (user == null)
-            throw new EntityNotFoundException();
+            return Results.Unauthorized();
 
         db.Users.Remove(user);
 
         _ = await db.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok();
     }
 }

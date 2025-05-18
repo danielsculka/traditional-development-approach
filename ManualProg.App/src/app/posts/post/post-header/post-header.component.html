@@ -1,9 +1,10 @@
-  <div class="header" [routerLink]="'/profiles/' + profile.id">
-    <img [src]="profileImage">
+<div class="header">
+  <app-profile-tag [profile]="post.profile"></app-profile-tag>
 
-    <div class="details">
-      <span class="name">{{ profile.name }}</span>
-
-      <span class="date"> • {{ post.created | date }}</span>
-    </div>
+  <div class="details">
+    • <span class="date">{{ post.created | date }}</span>
   </div>
+
+  <button mat-button class="delete" *ngIf="canDelete"
+    (click)="delete()">Delete</button>
+</div>

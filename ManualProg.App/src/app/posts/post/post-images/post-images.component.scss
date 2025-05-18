@@ -1,11 +1,43 @@
 .images {
-  img {
+  .content {
     width: 100%;
     aspect-ratio: 1 / 1.25;
-    object-fit: cover;
+
+    .purchase {
+      width: 100%;
+      height: 100%;
+      background-color: rgb(219, 219, 219);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        height: 75px !important;
+        margin-bottom: 25px;
+
+        ::ng-deep {
+          .title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+          }
+
+          .price {
+            font-size: 1.1em;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin-bottom: -4px;
+    }
   }
 
-  &.solo img{
-    aspect-ratio: 1 / 1.333;
-  }
+   &.solo .content {
+      aspect-ratio: 1 / 1.333;
+   }
 }

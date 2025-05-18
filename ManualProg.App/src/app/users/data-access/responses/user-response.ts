@@ -11,4 +11,5 @@ export interface IUserResponse {
 export interface IUserResponseProfileData {
   id: string;
   name: string;
+  hasImage: boolean;
 }

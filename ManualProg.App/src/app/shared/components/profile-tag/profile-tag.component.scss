@@ -1,0 +1,14 @@
+.profile-tag {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}

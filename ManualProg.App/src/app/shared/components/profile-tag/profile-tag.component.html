@@ -1,0 +1,5 @@
+<div class="profile-tag" (click)="openProfile()">
+  <img [src]="profileImage">
+
+  <span class="name" *ngIf="!isMinimalistic">{{ profile.name }}</span>
+</div>

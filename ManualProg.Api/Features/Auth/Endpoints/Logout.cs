@@ -1,5 +1,4 @@
 ﻿using ManualProg.Api.Data;
-using ManualProg.Api.Exceptions;
 using ManualProg.Api.Features.Auth.Requests;
 using ManualProg.Api.Features.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,7 @@ public class Logout : IEndpoint
         .MapPost("/logout", Handle)
         .WithSummary("Logout");
 
-    private static async Task Handle(
+    private static async Task<IResult> Handle(
         [FromBody] LogoutRequest request,
         [FromServices] AppDbContext db,
         [FromServices] IdentityService identityManager,
@@ -25,11 +24,13 @@ public class Logout : IEndpoint
             .FirstOrDefaultAsync(cancellationToken);
 
         if (user == null)
-            throw new EntityNotFoundException();
+            return Results.NotFound();
 
         user.RefreshToken = null;
         user.RefreshTokenExpiryTime = null;
 
         await db.SaveChangesAsync(cancellationToken);
+
+        return Results.Ok();
     }
 }

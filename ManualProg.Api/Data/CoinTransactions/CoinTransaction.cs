@@ -8,7 +8,7 @@ public class CoinTransaction : Entity<Guid>
     public required virtual Profile SenderProfile { get; init; }
 
     public Guid ReceiverProfileId { get; init; }
-    public required virtual Profile ReceiverProfile { get; init; }
+    public required virtual Profile ReceiverProfile { get; set; }
 
-    public required int Amount { get; init; }
+    public required int Amount { get; set; }
 }

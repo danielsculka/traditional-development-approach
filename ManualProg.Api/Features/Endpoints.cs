@@ -97,7 +97,6 @@ public static class Endpoints
 
         endpoints.MapPublicGroup()
             .MapEndpoint<GetProfile>()
-            .MapEndpoint<GetProfilePosts>()
             .MapEndpoint<GetProfileImage>();
 
         endpoints.MapAuthorizedGroup()
