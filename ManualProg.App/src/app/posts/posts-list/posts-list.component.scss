@@ -6,6 +6,6 @@
   width: 100%;
 
   ::ng-deep .post {
-    max-width: 25vw;
+    width: min(100%, 500px);
   }
 }

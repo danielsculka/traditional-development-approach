@@ -38,10 +38,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   align-items: center;
   flex-direction: column;
   overflow-y: auto;
+  position: relative;
 
   .container {
     padding: 30px 20px 0 20px;
     width: 935px;
+    box-sizing: border-box;
+
+    @media screen and (max-width: 1400px) {
+      width: 635px;
+    }
+
+    @media screen and (max-width: 850px) {
+      width: 100%;
+    }
   }
 
   &.small {

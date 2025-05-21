@@ -12,7 +12,7 @@ public class GetCommentReplies : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/{id}/replies", HandleAsync)
-        .WithSummary("Gets all replies to a comment");
+        .WithSummary("Iegūt komentāra atbildes");
 
     private static async Task<PagedList<CommentResponse>> HandleAsync(
         [FromRoute] Guid id,

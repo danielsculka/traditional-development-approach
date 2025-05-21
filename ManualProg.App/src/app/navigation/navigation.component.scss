@@ -7,6 +7,41 @@
   box-sizing: border-box;
   flex-direction: column;
 
+  @media screen and (max-width: 1400px) {
+    width: 200px;
+  }
+
+  @media screen and (max-width: 850px) {
+    width: 74px;
+
+    .navigation-title {
+      display: none;
+    }
+
+    a div{
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    position: absolute;
+    z-index: 1;
+    background: white;
+    bottom: 0;
+    flex-direction: row;
+    height: 78px;
+    width: 100%;
+
+    a {
+      margin: 0 8px !important;
+    }
+
+    .navigations {
+      width: 100%;
+      display: flex;
+    }
+  }
+
   &.visible {
     display: flex;
   }

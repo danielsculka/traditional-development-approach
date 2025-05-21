@@ -10,7 +10,7 @@ public class DeleteProfile : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapDelete("/{id}", HandleAsync)
-        .WithSummary("Delete a profile");
+        .WithSummary("Dzēst profilu");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

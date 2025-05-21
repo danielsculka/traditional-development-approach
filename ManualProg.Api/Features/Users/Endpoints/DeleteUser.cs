@@ -9,7 +9,7 @@ public class DeleteUser : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapDelete("/{id}", HandleAsync)
-        .WithSummary("Delete a user");
+        .WithSummary("Dzēst lietotāju");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

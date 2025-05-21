@@ -11,7 +11,7 @@ public class GetPostImage : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/images/{id}", HandleAsync)
-        .WithSummary("Get a post image");
+        .WithSummary("Iegūt ieraksta attēlu");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

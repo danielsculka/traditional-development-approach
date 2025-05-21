@@ -33,14 +33,15 @@ public static class Endpoints
         endpoints.MapAuthEndpoints();
         endpoints.MapPostEndpoints();
         endpoints.MapCommentEndpoints();
-        endpoints.MapProfileEndpoints();
         endpoints.MapUserEndpoints();
+        endpoints.MapProfileEndpoints();
     }
 
     private static void MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
         var endpoints = app.MapGroup("/auth")
-            .WithTags("Auth");
+            .WithTags("1. Autentifikācija un autorizācija")
+            .WithOrder(1);
 
         endpoints.MapPublicGroup()
             .MapEndpoint<Register>()
@@ -54,7 +55,8 @@ public static class Endpoints
     private static void MapPostEndpoints(this IEndpointRouteBuilder app)
     {
         var endpoints = app.MapGroup("/posts")
-            .WithTags("Posts");
+            .WithTags("4. Ieraksti")
+            .WithOrder(4);
 
         endpoints.MapPublicGroup()
             .MapEndpoint<GetPosts>()
@@ -76,7 +78,8 @@ public static class Endpoints
     private static void MapCommentEndpoints(this IEndpointRouteBuilder app)
     {
         var endpoints = app.MapGroup("/comments")
-            .WithTags("Comments");
+            .WithTags("5. Komentāri")
+            .WithOrder(5);
 
         endpoints.MapPublicGroup()
             .MapEndpoint<GetCommentReplies>();
@@ -93,7 +96,8 @@ public static class Endpoints
     private static void MapProfileEndpoints(this IEndpointRouteBuilder app)
     {
         var endpoints = app.MapGroup("/profiles")
-            .WithTags("Profiles");
+            .WithTags("3. Profili")
+            .WithOrder(3);
 
         endpoints.MapPublicGroup()
             .MapEndpoint<GetProfile>()
@@ -110,7 +114,8 @@ public static class Endpoints
     private static void MapUserEndpoints(this IEndpointRouteBuilder app)
     {
         var endpoints = app.MapGroup("/users")
-            .WithTags("Users");
+            .WithTags("2. Lietotāji")
+            .WithOrder(2);
 
         endpoints.MapAuthorizedGroup([UserRole.Administrator, UserRole.Moderator])
             .MapEndpoint<GetUsers>();

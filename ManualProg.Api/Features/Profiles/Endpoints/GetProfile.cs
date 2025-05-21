@@ -10,7 +10,7 @@ public class GetProfile : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/{id}", HandleAsync)
-        .WithSummary("Get a profile");
+        .WithSummary("Iegūt profilu");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id, 

@@ -10,7 +10,7 @@ public class UpdatePost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPut("/{id}", HandleAsync)
-        .WithSummary("Update a post");
+        .WithSummary("Atjaunot ierakstu");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

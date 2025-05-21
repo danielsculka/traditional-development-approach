@@ -9,7 +9,7 @@ public class UnlikeComment : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/{id}/unlike", HandleAsync)
-        .WithSummary("Unlike a post");
+        .WithSummary("Noņemt komentāram atzīmi `patīk`");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

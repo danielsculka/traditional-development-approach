@@ -12,7 +12,7 @@ public class GetPostComments : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/{id}/comments", HandleAsync)
-        .WithSummary("Get a post's top level comments");
+        .WithSummary("Iegūt ieraksta pirmā līmeņa komentārus");
 
     private static async Task<PagedList<CommentResponse>> HandleAsync(
         [FromRoute] Guid id,

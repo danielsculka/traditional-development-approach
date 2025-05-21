@@ -11,7 +11,7 @@ public class LikePost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/{id}/like", HandleAsync)
-        .WithSummary("Like a post");
+        .WithSummary("Atzīmēt ierakstu ar `Patīk`");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

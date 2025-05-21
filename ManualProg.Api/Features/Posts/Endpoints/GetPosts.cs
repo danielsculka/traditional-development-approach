@@ -12,7 +12,7 @@ public class GetPosts : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/", HandleAsync)
-        .WithSummary("Get posts");
+        .WithSummary("Iegūt ierakstus");
 
     private static async Task<PagedList<PostResponse>> HandleAsync(
         [AsParameters] GetPostsRequest request,

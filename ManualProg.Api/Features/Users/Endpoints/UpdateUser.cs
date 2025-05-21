@@ -11,7 +11,7 @@ public class UpdateUser : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPut("/{id}", HandleAsync)
-        .WithSummary("Update a post");
+        .WithSummary("Atjaunot lietotāju");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

@@ -11,7 +11,7 @@ public class DeletePost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapDelete("/{id}", HandleAsync)
-        .WithSummary("Delete a post");
+        .WithSummary("Dzēst ierakstu");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

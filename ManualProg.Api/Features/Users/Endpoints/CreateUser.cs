@@ -12,7 +12,7 @@ public class CreateUser : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/", HandleAsync)
-        .WithSummary("Creates a new user");
+        .WithSummary("Izveidot jaunu lietotāju");
 
     private static async Task<Guid> HandleAsync(
         [FromBody] CreateUserRequest request, 

@@ -11,7 +11,7 @@ public class PurchasePost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/{id}/purchase", HandleAsync)
-        .WithSummary("Purchase a post");
+        .WithSummary("Pirkt ierakstu");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

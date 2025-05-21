@@ -12,7 +12,7 @@ public class LikeComment : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/{id}/like", HandleAsync)
-        .WithSummary("Like a comment");
+        .WithSummary("Atzīmēt komentāru ar `patīk`");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

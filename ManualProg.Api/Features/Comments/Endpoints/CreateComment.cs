@@ -12,7 +12,7 @@ public class CreateComment : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/", HandleAsync)
-        .WithSummary("Creates a new comment");
+        .WithSummary("Izveidot jaunu ierakstu");
 
     private static async Task<IResult> HandleAsync(
         [FromBody] CreateCommentRequest request,

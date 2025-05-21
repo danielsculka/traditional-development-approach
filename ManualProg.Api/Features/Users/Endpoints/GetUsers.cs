@@ -11,7 +11,7 @@ public class GetUsers : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/", HandleAsync)
-        .WithSummary("Get users");
+        .WithSummary("Iegūt lietotājus");
 
     private static async Task<PagedList<UserResponse>> HandleAsync(
         [AsParameters] GetUsersRequest request,

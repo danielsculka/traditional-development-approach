@@ -10,7 +10,7 @@ public class Logout : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/logout", Handle)
-        .WithSummary("Logout");
+        .WithSummary("Izrkastīties");
 
     private static async Task<IResult> Handle(
         [FromBody] LogoutRequest request,

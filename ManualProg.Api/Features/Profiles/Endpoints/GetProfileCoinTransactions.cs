@@ -12,7 +12,7 @@ public class GetProfileCoinTransactions : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/{id}/transactions", HandleAsync)
-        .WithSummary("Get a profile coin transactions");
+        .WithSummary("Iegūt profila monētu plūsmas");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

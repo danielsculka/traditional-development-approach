@@ -12,7 +12,7 @@ public class CreatePost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/", HandleAsync)
-        .WithSummary("Creates a new post");
+        .WithSummary("Izveidot jaunu ierakstu");
 
     private static readonly string[] AcceptedImageTypes = [MediaTypeNames.Image.Png, MediaTypeNames.Image.Jpeg];
 

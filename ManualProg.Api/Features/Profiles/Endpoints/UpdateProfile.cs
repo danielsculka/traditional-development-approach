@@ -11,7 +11,7 @@ public class UpdateProfile : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPut("/{id}", HandleAsync)
-        .WithSummary("Update a profile image");
+        .WithSummary("Atjaunot profilu");
 
     private static readonly string[] AcceptedImageTypes = [MediaTypeNames.Image.Png, MediaTypeNames.Image.Jpeg];
 

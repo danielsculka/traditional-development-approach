@@ -11,7 +11,7 @@ public class Login : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/login", HandleAsync)
-        .WithSummary("Login");
+        .WithSummary("Pierakstīties");
 
     private static async Task<IResult> HandleAsync(
         [FromBody] LoginRequest request,

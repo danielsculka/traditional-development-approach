@@ -11,7 +11,7 @@ public class DeleteComment : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapDelete("/{id}", HandleAsync)
-        .WithSummary("Delete a comment");
+        .WithSummary("Dzēst komentāru");
 
     private static async Task<IResult> HandleAsync(
         [FromRoute] Guid id,

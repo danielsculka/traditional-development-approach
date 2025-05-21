@@ -11,7 +11,7 @@ public class RefreshToken : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/refresh", Handle)
-        .WithSummary("Refresh token");
+        .WithSummary("Iegūt atsvaidzināšanas pilnvara");
 
     private static async Task<IResult> Handle(
         [FromBody] RefreshTokenRequest request,

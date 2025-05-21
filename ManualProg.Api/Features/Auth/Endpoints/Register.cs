@@ -16,7 +16,7 @@ public class Register : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/register", HandleAsync)
-        .WithSummary("Register");
+        .WithSummary("Reģistrēties");
 
     private static readonly string[] AcceptedImageTypes = [MediaTypeNames.Image.Png, MediaTypeNames.Image.Jpeg];
 
